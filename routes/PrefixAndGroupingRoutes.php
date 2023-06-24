@@ -23,7 +23,3 @@ Route:: prefix('usser') ->group(function (){
 
 // MiddleWare is making URL Hidden sometimes as you are not login ...
 
-Route:: get('Testo',function(){
-    return'Farida Yehia';
-});
-    //->middleware('Authenticated');

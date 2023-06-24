@@ -50,11 +50,6 @@ Route::get('get',function (){
 // ROutes with Namespaces
 
 
-Route::namespace('Admin')->group(function(){
-    Route::get('Farida',[adminController::class, 'showAdminName']);
-});
-
-
 
 
 Route::get('/getAdmin/{id}',[adminController::class,'show']);
