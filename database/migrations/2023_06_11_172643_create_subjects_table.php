@@ -18,6 +18,7 @@ class CreateSubjectsTable extends Migration
             $table->unsignedBigInteger('controllerid');
             $table->foreign('controllerid')->references('id')->on('users')->onDelete('cascade');
             $table->string('description');
+
             $table->string('finaldecision');
             $table->boolean('isCompleted');
             $table->string('from');

@@ -16,6 +16,7 @@ class subjectControllerController extends Controller
     public function index()
     {
         //
+        return view('SubjectController');
     }
 
     /**

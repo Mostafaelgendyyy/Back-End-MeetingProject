@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
- class User extends Authenticatable
+class User extends Authenticatable
  {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens, UuidTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +29,11 @@ use Illuminate\Notifications\Notifiable;
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+     public function setPasswordAttribute($value)
+     {
+         $this->attributes['password'] = bcrypt($value);
+     }
 
     /**
      * The attributes that should be cast to native types.

@@ -17,9 +17,9 @@ class CreateMeetingsTable extends Migration
             $table->id('meetingid');
             $table->unsignedBigInteger('initiatorid');
             $table->foreign('initiatorid')->references('id')->on('users')->onDelete('cascade');
-            $table->string('location',70);
+            $table->string('location');
             $table->date('date');
-            $table->string('topic',60);
+            $table->string('topic');
             $table->tinyInteger('islast'); # ---> 0 no , 1 yes
         });
     }

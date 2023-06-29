@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\UserController;
+use Cassandra\Uuid;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -56,3 +58,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
     Route::get('/Interface',[App\Http\Controllers\adminController::class, 'index']);
 });
+
+Route::prefix('subjectController')->middleware(['auth','subjectController'])->group(function (){
+    Route::get('/Interface',[App\Http\Controllers\subjectControllerController::class, 'index']);
+});
+
+Route::prefix('doctor')->middleware(['auth','doctor'])->group(function (){
+    Route::get('/Interface',[App\Http\Controllers\doctorController::class, 'index']);
+});
+
+Route::prefix('initiator')->middleware(['auth','initiator'])->group(function (){
+    Route::get('/Interface',[App\Http\Controllers\MeetingInitiatorController::class, 'index']);
+});
+

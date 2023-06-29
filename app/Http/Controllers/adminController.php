@@ -52,8 +52,8 @@ class adminController extends Controller
             'name' =>$request->get('name'),
             'email' =>$request->get('email'),
             'password' =>$request->get('password'),
-            'username' =>$request->get('username'),
-
+            'adminstration' =>$request->get('adminstration'),
+            'role'=>'1'
         ]);
 
 

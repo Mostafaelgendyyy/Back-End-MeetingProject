@@ -22,11 +22,28 @@ Route::middleware('Auth:api')->get('/user', function (Request $request) {
 //Route::get('/get',[adminController::class,'ShowMyName']);
 
 /****************** ADMIN *****************/
-Route::get('/getAdmin/{adminid?}',[adminController::class,'show']);
 
-Route::get('/getAdminByemail/{email}',[adminController::class,'showbyEmail']);
 
-Route::get('/getAdminByusername/{username}',[adminController::class,'showbyUsername']);
+
+Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
+    Route::get('/Interface',[App\Http\Controllers\adminController::class, 'index']);
+
+    Route::get('/getAdmin/{adminid?}',[adminController::class,'show']);
+
+    Route::get('/getAdminByemail/{email}',[adminController::class,'showbyEmail']);
+
+    Route::get('/getAdminByusername/{username}',[adminController::class,'showbyUsername']);
+
+    Route::post('/adddoctor',[adminController::class,'addDoctor']);
+
+    Route::post('/addSubjectController',[adminController::class,'addSubjectController']);
+
+    Route::post('/addInitiator',[adminController::class,'addInitiator']);
+
+    Route::post('/addAdmin',[adminController::class,'addAdmin']);
+
+    Route::delete('/DELETE/{adminid}',[adminController::class,'destroy']);
+});
 
 Route::post('/adddoctor',[adminController::class,'addDoctor']);
 
@@ -35,12 +52,6 @@ Route::post('/addSubjectController',[adminController::class,'addSubjectControlle
 Route::post('/addInitiator',[adminController::class,'addInitiator']);
 
 Route::post('/addAdmin',[adminController::class,'addAdmin']);
-
-Route::delete('/DELETE/{adminid}',[adminController::class,'destroy']);
-
-Route::get('/generate', [adminController::class, 'generatePDF']);
-
-
 
 
 /****************** Subject Controller *****************/
@@ -57,6 +68,7 @@ Route::post('/sendEMail',[\App\Http\Controllers\MeetingMailController::class,'se
 Route::post('/create-meeting',[\App\Http\Controllers\MeetingInitiatorController::class,'createMeeting']);
 
 Route::post('/request-Doctor',[\App\Http\Controllers\MeetingInitiatorController::class,'RequestDoctor']);
+
 
 
 /*

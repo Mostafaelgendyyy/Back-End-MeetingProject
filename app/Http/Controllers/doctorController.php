@@ -23,7 +23,7 @@ class doctorController extends Controller
     public function index()
     {
         //
-
+        return view('doctor');
     }
 
     /**
