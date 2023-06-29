@@ -52,28 +52,39 @@ class LoginController extends Controller
         }
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
-        }
-
-        return $user->createToken($request->device_name)->plainTextToken;
-    }
-
-    public function logout(Request $request)
-    {
-        $request->user()->tokens()->delete();
-    }
+//    public function login(Request $request)
+//    {
+//        $request->validate([
+//            'email' => 'required|email',
+//            'password' => 'required',
+//        ]);
+//
+//        $user = User::where('email', $request->email)->first();
+//
+//        if (!$user || !Hash::check($request->password, $user->password)) {
+//            throw ValidationException::withMessages([
+//                'email' => ['The provided credentials are incorrect.'],
+//            ]);
+//        }
+//
+//        $token = $user->createToken('browser')->plainTextToken;
+//
+//        $res = [
+//            'user' => $user,
+//            'token' => $token
+//        ];
+//
+//        return response($res, 201);
+//    }
+//
+//    public function logout(Request $request)
+//    {
+//        //$request->user()->tokens()->delete();
+//        auth()->user()->tokens()->delete();
+//        return [
+//            'message' => 'user logged out'
+//        ];
+//    }
 
     /**
      * Create a new controller instance.

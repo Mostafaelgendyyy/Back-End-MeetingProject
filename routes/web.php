@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Cassandra\Uuid;
 use Illuminate\Support\Facades\Auth;
@@ -50,9 +51,9 @@ Route::get('/test5/{id?}', function () { // id is not required and Must be sent 
 
 
 
-Auth::routes();
+//Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
@@ -71,3 +72,12 @@ Route::prefix('initiator')->middleware(['auth','initiator'])->group(function (){
     Route::get('/Interface',[App\Http\Controllers\MeetingInitiatorController::class, 'index']);
 });
 
+
+//Route:: middleware('auth:sanctum')->get('/user',function (\http\Env\Request $request){
+//
+//    return $request->user();
+//});
+
+
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/login', [AuthController::class, 'login']);
