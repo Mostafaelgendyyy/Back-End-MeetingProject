@@ -45,12 +45,11 @@ class doctorController extends Controller
     public function store(Request $request)
     {
 //        $this->validate($request,
-//            ['adminid'=>'required',
+//            [
 //                'name' =>'required',
 //                'email' =>'required',
 //                'password' =>'required',
-//                'department' =>'required',
-//                'isinitiator'=>'required'
+//                'adminstration' =>'required',
 //            ]);
         $Doctor = new User([
             'adminstration' =>$request->get('adminstration'),
@@ -137,6 +136,7 @@ class doctorController extends Controller
 
         // ROUTING
     }
+
 
 
 }

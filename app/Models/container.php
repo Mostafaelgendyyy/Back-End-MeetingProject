@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class container extends Model
 {
     use HasFactory;
-    protected $fillable = ['controllerid','meetingid','name'];
+    protected $fillable = ['containerid','controllerid','meetingid','name'];
 
     public $timestamps = false;
 

@@ -37,14 +37,13 @@ class subjectControllerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
 //        $this->validate($request,
-//            ['adminid' =>'required',
-//                'adminstration' =>'required',
+//            [
+//                'name' =>'required',
 //                'email' =>'required',
 //                'password' =>'required',
-//                'username' =>'required',
-//                'name' =>'required'
+//                'adminstration' =>'required',
 //            ]);
         $subjectController= new User([
             'adminstration' =>$request->get('adminstration'),

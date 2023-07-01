@@ -73,7 +73,7 @@ class adminController extends Controller
     {
         // Find certain admin with certain id
 
-        return $adminid? User::find($adminid) : User::all();
+        return $adminid? User::find($adminid) : User::where('role','1');
 //        dd($Admin);
     }
 

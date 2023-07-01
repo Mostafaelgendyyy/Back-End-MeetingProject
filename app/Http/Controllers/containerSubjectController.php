@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\containerSubjects;
+use App\Models\subject;
 use Illuminate\Http\Request;
 class containerSubjectController extends Controller
 {
@@ -84,11 +85,11 @@ class containerSubjectController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $this->validate($request,
-            ['containerid' =>'required',
-                'subjectid' =>'required',
-                'decision' =>'required'
-            ]);
+//        $this->validate($request,
+//            ['containerid' =>'required',
+//                'subjectid' =>'required',
+//                'decision' =>'required'
+//            ]);
         $Container= containerSubjects::find($id);
         $Container->controllerid = $request.get('containerid');
         $Container->meetingid = $request.get('subjectid');
@@ -110,5 +111,10 @@ class containerSubjectController extends Controller
         //
     }
 
+    public function getSubjectsofContainer($containerID){
+        $subjectsIDS = containerSubjects::select('subjectid')->where('containerid',$containerID)->get();
 
+        $subjectsData= subject::find($subjectsIDS);
+        return $subjectsData;
+    }
 }

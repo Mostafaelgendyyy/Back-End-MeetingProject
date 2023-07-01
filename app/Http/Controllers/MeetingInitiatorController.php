@@ -7,7 +7,7 @@ use App\Models\meeting;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class MeetingInitiatorController extends Controller
+class MeetingInitiatorController extends doctorController
 {
     //
     public function index()
@@ -17,12 +17,11 @@ class MeetingInitiatorController extends Controller
     public function store(Request $request)
     {
 //        $this->validate($request,
-//            ['adminid'=>'required',
+//            [
 //                'name' =>'required',
 //                'email' =>'required',
 //                'password' =>'required',
-//                'department' =>'required',
-//                'isinitiator'=>'required'
+//                'adminstration' =>'required',
 //            ]);
         $Doctor = new User([
             'adminstration' =>$request->get('adminstration'),
@@ -37,7 +36,10 @@ class MeetingInitiatorController extends Controller
     public function show($id)
     {
         $Doctor= User::find($id);
-        dd($Doctor);
+        if ($Doctor->role!=3)
+        {
+            return "No Doctor with this ID";
+        }
 
     }
     public function showbyEmail($EMail)

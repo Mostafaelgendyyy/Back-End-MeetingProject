@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class subject extends Model
 {
     use HasFactory;
-    protected $fillable = ['subjectid','controllerid','description','finaldecision','iscompleted','from'];
+    protected $fillable = ['subjectid','controllerid','description','subject_Type','finaldecision','iscompleted','from'];
     public $timestamps = false;
 
     protected $primaryKey = 'subjectid';

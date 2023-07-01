@@ -53,7 +53,7 @@ Route::get('/test5/{id?}', function () { // id is not required and Must be sent 
 
 //Auth::routes();
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
@@ -78,6 +78,12 @@ Route::prefix('initiator')->middleware(['auth','initiator'])->group(function (){
 //    return $request->user();
 //});
 
-
-Route::post('/logout', [AuthController::class, 'logout']);
+//
+Route::Delete('/logout', [AuthController::class, 'logout']);
 Route::post('/login', [AuthController::class, 'login']);
+
+
+
+//Route::get('/getAdmin/{adminid?}',[adminController::class,'show']);
+
+Route::get('/subjects/{containerID}',[\App\Http\Controllers\containerSubjectController::class,'getSubjectsofContainer']);
