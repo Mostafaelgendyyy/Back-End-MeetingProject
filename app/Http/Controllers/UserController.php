@@ -55,17 +55,22 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request,
-            ['name' => 'required',
-                'email' => 'required',
-                'password' => 'required',
-                'role' => 'required'
-            ]);
+//        $this->validate($request,
+//            ['name' => 'required',
+//                'email' => 'required',
+//                'password' => 'required',
+//                'role' => 'required'
+//            ]);
         $user = User::find($id);
-        $user->name = $request . get('name');
-        $user->email = $request . get('email');
-        $user->password = $request . get('password');
-        $user->username = $request . get('role');
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = $request->get('password');
+        $user->save();
+    }
+
+    public function changePassword(Request $request,$id){
+        $user = User::find($id);
+        $user->password = $request->get('password');
         $user->save();
     }
 
@@ -73,9 +78,8 @@ class UserController extends Controller
     {
         $user= User::find($id);
         $user->delete();
-        return 'Admin Deleted';
+        $user->save();
         ////////////////////// RETURN TO ROUTING Page access DONE
-
     }
 
 }

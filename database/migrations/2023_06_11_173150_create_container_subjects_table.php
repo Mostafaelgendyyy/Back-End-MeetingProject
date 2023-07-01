@@ -19,7 +19,9 @@ class CreateContainerSubjectsTable extends Migration
             $table->foreign('containerid')->references('containerid')->on('containers')->onDelete('cascade');
             $table->unsignedBigInteger('subjectid');
             $table->foreign('subjectid')->references('subjectid')->on('subjects')->onDelete('cascade');
-            $table->string('decision',100);
+            $table->integer('votes-accepted');
+            $table->integer('votes-rejected');
+            $table->string('decision');
         });
     }
 

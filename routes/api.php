@@ -3,6 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\MeetingInitiatorController;
+use App\Http\Controllers\subjectControllerController;
+use App\Http\Controllers\doctorController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\containerSubjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +24,8 @@ Route::middleware('Auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Route::get('/get',[adminController::class,'ShowMyName']);
 
 /****************** ADMIN *****************/
-
-
 
 Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
     Route::get('/Interface',[App\Http\Controllers\adminController::class, 'index']);
@@ -43,31 +45,82 @@ Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
     Route::post('/addAdmin',[adminController::class,'addAdmin']);
 
     Route::delete('/DELETE/{adminid}',[adminController::class,'destroy']);
+
+    Route::post('/update-profile/{id}',[UserController::class,'update']);
+
+    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
+
+    Route::get('/subjects/{containerID}',[containerSubjectController::class,'getSubjectsofContainer']);
+
 });
 
-Route::post('/adddoctor',[adminController::class,'addDoctor']);
 
-Route::post('/addSubjectController',[adminController::class,'addSubjectController']);
+/****************** Doctor *****************/
 
-Route::post('/addInitiator',[adminController::class,'addInitiator']);
+Route::prefix('doctor')->middleware(['auth','doctor'])->group(function (){
+    Route::get('/Interface',[doctorController::class, 'index']);
 
-Route::post('/addAdmin',[adminController::class,'addAdmin']);
+    Route::post('/update-profile/{id}',[UserController::class,'update']);
+
+    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
+
+    Route::post('voteaccept-meeting',[containerSubjectController::class,'voteAccept']);
+
+    Route::post('votereject-meeting',[containerSubjectController::class,'voteReject']);
+
+    Route::get('/subjects/{containerID}',[containerSubjectController::class,'getSubjectsofContainer']);
+
+});
+
+
+/********************** Meeting initiator ******************/
+
+Route::prefix('meeting-initiator')->middleware(['auth','initiator'])->group(function (){
+    Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
+
+    Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
+
+    Route::post('/meetingContainer',[MeetingInitiatorController::class,'createContainer']);
+
+    Route::post('/addSubject-in-Container',[MeetingInitiatorController::class,'AddSubjecttoContainer']);
+
+    Route::post('/request-doctor',[MeetingInitiatorController::class,'RequestDoctor']);
+
+    Route::delete('/remove-subject',[MeetingInitiatorController::class,'RemoveSubjectFromContainer']);
+
+    Route::delete('/delete-Container',[MeetingInitiatorController::class,'deleteContainer']);
+
+    Route::delete('/delete-Meeting',[MeetingInitiatorController::class,'deleteMeeting']);
+
+    Route::post('/update-profile/{id}',[UserController::class,'update']);
+
+    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
+
+    Route::post('voteaccept-meeting',[containerSubjectController::class,'voteAccept']);
+
+    Route::post('votereject-meeting',[containerSubjectController::class,'voteReject']);
+});
 
 
 /****************** Subject Controller *****************/
-Route::post('/updateSub/{id}', [\App\Http\Controllers\subjectController::class,'archive']);
-Route::post('/sc',[\App\Http\Controllers\subjectControllerController::class,'store']);
-Route::post('/archive/{id}',[\App\Http\Controllers\subjectControllerController::class,'ArchiveSubject']);
-/****************** SUbject *****************/
 
-Route::post('/addsub',[\App\Http\Controllers\subjectController::class,'store']);
+Route::prefix('subjectController')->middleware(['auth','subjectController'])->group(function (){
+    Route::get('/Interface',[subjectControllerController::class, 'index']);
 
-Route::post('/sendEMail',[\App\Http\Controllers\MeetingMailController::class,'sendMeetingMail']);
+    Route::post('/addsubject',[subjectControllerController::class,'AddSubject']);
 
-/********************** Meeting initiator ******************/
-Route::post('/create-meeting',[\App\Http\Controllers\MeetingInitiatorController::class,'createMeeting']);
+    Route::post('/archive/{id}',[subjectControllerController::class,'ArchiveSubject']);
 
-Route::post('/request-Doctor',[\App\Http\Controllers\MeetingInitiatorController::class,'RequestDoctor']);
+    Route::post('/addSubject-in-Container',[subjectControllerController::class,'AddSubjecttoContainer']);
+
+    Route::delete('/remove-subject',[subjectControllerController::class,'RemoveSubjectFromContainer']);
+
+    Route::post('/update-profile/{id}',[UserController::class,'update']);
+
+    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
+
+});
+
 
 
 

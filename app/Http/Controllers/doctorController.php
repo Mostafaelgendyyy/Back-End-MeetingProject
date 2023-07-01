@@ -137,6 +137,10 @@ class doctorController extends Controller
         // ROUTING
     }
 
+    public function voteforsubject(Request $request){
+
+    }
+
 
 
 }

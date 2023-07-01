@@ -87,12 +87,12 @@ class meetingController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $this->validate([
-            'initiatorid'=> 'required',
-            'location'=> 'required',
-            'date'=> 'required',
-            'topic'=> 'required'
-        ]);
+//        $this->validate([
+//            'initiatorid'=> 'required',
+//            'location'=> 'required',
+//            'date'=> 'required',
+//            'topic'=> 'required'
+//        ]);
         $Meeting = meeting::find($id);
 
         $Meeting->initiatorid = $request->get('initiatorid');
@@ -124,4 +124,5 @@ class meetingController extends Controller
         $filter = meeting::where([['initiatorid',$id],['islast',1]])->get();
         return $filter;
     }
+
 }

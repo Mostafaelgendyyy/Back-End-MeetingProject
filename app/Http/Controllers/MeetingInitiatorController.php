@@ -99,6 +99,10 @@ class MeetingInitiatorController extends doctorController
         return $last;
     }
 
+    public function createContainer(Request $request){
+        $CC= new containerController();
+        $CC->store($request);
+    }
     public function RequestDoctor(Request $request){
         $Invitation= new InvitationNotificationsController();
         $Invitation->store($request);
@@ -109,4 +113,28 @@ class MeetingInitiatorController extends doctorController
         $CS->store($request);
     }
 
+    public function RemoveSubjectFromContainer($id){
+        $CS= new containerSubjectController();
+        $CS->destroy($id);
+    }
+
+    public function deleteContainer($id){
+        $CC= new containerController();
+        $CC->destroy($id);
+    }
+
+    public function deleteMeeting($id){
+        $MC= new meetingController();
+        $MC->destroy($id);
+    }
+
+    public function UpdateProfile(Request $request,$Id){
+        $user= new UserController();
+        $user->update($request,$Id);
+    }
+
+    public function ChangePassword(Request $request,$Id){
+        $user= new UserController();
+        $user->update($request,$Id);
+    }
 }

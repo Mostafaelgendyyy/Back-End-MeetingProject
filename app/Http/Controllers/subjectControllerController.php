@@ -135,5 +135,15 @@ class subjectControllerController extends Controller
         $SC = new \App\Http\Controllers\subjectController();
         $SC->archive($id);
     }
+
+    public function AddSubjecttoContainer(Request $request){
+        $CS= new containerSubjectController();
+        $CS->store($request);
+    }
+
+    public function RemoveSubjectFromContainer($id){
+        $CS= new containerSubjectController();
+        $CS->destroy($id);
+    }
 }
 

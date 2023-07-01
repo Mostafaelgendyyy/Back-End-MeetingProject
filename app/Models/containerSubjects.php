@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class containerSubjects extends Model
 {
     use HasFactory;
-    protected $fillable = ['containerid','subjectid','decision'];
+    protected $fillable = ['containerid','subjectid','decision','votes-accepted','votes-rejected'];
     public $timestamps = false;
 
 

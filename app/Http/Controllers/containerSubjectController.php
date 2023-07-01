@@ -44,7 +44,8 @@ class containerSubjectController extends Controller
         $Container= new containerSubjects([
             'containerid' => $request->get('containerid'),
             'subjectid' => $request->get('subjectid'),
-            'decision' => $request->get('decision')
+            'votes-accepted'=>'0',
+            'votes-rejected'=>'0'
         ]);
         $Container->save();
 
@@ -117,4 +118,34 @@ class containerSubjectController extends Controller
         $subjectsData= subject::find($subjectsIDS);
         return $subjectsData;
     }
+
+    public function voteAccept(Request $request){
+        $subject=containerSubjects::where([
+            ['containerid'=>$request->get('containerid')],
+            ['subjectid'=>$request->get('subjectid')]
+        ])->get();
+
+        $acceptedvotes= intval($subject->select('votes-accepted'));
+        ++$acceptedvotes;
+
+        containerSubjects::where([
+            ['containerid'=>$request->get('containerid')],
+            ['subjectid'=>$request->get('subjectid')]
+        ])->update(['votes-accepted'=>$acceptedvotes]);
+    }
+    public function voteReject(Request $request){
+        $subject=containerSubjects::where([
+            ['containerid'=>$request->get('containerid')],
+            ['subjectid'=>$request->get('subjectid')]
+        ])->get();
+
+        $Rejectedvotes= intval($subject->select('votes-rejected'));
+        ++$Rejectedvotes;
+
+        containerSubjects::where([
+            ['containerid'=>$request->get('containerid')],
+            ['subjectid'=>$request->get('subjectid')]
+        ])->update(['votes-accepted'=>$Rejectedvotes]);
+    }
+
 }
