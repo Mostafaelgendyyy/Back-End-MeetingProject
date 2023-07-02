@@ -22,7 +22,9 @@ class CreateSubjectsTable extends Migration
             $table->string('finaldecision');
             $table->boolean('isCompleted');
             $table->string('from');
+            $table->string('attachment-link');
             $table->timestamps();
+
         });
     }
 

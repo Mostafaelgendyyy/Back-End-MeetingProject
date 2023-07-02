@@ -130,4 +130,10 @@ class subjectController extends Controller
     {
         subject::find($id)->update(["iscompleted" => "1"]);
     }
+
+    public function getAttachments($id){
+        $subject= subject::find($id);
+        $subjectattach=$subject::select('attachment-link');
+        return $subjectattach;
+    }
 }
