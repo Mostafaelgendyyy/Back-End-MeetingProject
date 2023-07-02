@@ -95,9 +95,9 @@ class InvitationNotificationsController extends Controller
 //            'reason'=> 'required'
 //        ]);
         $notification= InvitationNotifications::find($id);
-        $notification->doctorid = $request.get('doctorid');
-        $notification->meetingid = $request.get('meetingid');
-        $notification->status = $request.get('status');
+        $notification->doctorid = $request->get('doctorid');
+        $notification->meetingid = $request->get('meetingid');
+        $notification->status = $request->get('status');
         return $notification;
     }
 

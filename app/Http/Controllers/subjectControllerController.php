@@ -116,8 +116,13 @@ class subjectControllerController extends Controller
     public function destroy($id)
     {
         //
-        $subjectController=subjectController::find($id);
-        $subjectController->delete();
+        $subjectController=User::find($id);
+        if($subjectController->role=='0'){
+            $subjectController->delete();
+        }
+        else {
+            return 'cannot delete this User';
+        }
     }
     ///////////////////////////////////     CLASS DIAGRAM COntroller FUNCTIONALITYYY
     public function AddSubject(Request $request){

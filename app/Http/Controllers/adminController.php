@@ -112,12 +112,12 @@ class adminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,
-            ['name' =>'required',
-                'email' =>'required',
-                'password' =>'required',
-                'username' =>'required'
-            ]);
+//        $this->validate($request,
+//            ['name' =>'required',
+//                'email' =>'required',
+//                'password' =>'required',
+//                'username' =>'required'
+//            ]);
         $Admin= User::find($id);
         $Admin->name=$request->get('name');
         $Admin->email=$request->get('email');
@@ -136,9 +136,14 @@ class adminController extends Controller
     public function destroy($id)
     {
         $Admin= User::find($id);
-        $Admin->delete();
-        return 'Admin Deleted';
-        ////////////////////// RETURN TO ROUTING Page access DONE
+        if($Admin->role=='1'){
+            $Admin->delete();
+        }
+        else {
+            return 'Cannot delete this User';
+            ////////////////////// RETURN TO ROUTING Page access DONE
+
+        }
 
     }
     ///////////////////////////////////     CLASS DIAGRAM ADMIN FUNCTIONALITYYY
@@ -148,9 +153,18 @@ class adminController extends Controller
         $USC->store($request);
     }
 
+    public function deleteSubjectController($id){ # ROLE=>0
+        $USC = new SubjectControllerController();
+        return $USC->destroy($id);
+    }
     public function addAdmin(Request $request){ # ROLE=>1
         $USC = new adminController();
         $USC->store($request);
+    }
+
+    public function deleteAdmin($id){ # ROLE=>1
+        $USC = new adminController();
+        return $USC->destroy($id);
     }
 
     public function addDoctor(Request $request){# ROLE=>2
@@ -158,9 +172,39 @@ class adminController extends Controller
         $USC->store($request);
     }
 
+    public function deleteDoctor($id){# ROLE=>2
+        $USC = new doctorController();
+        return $USC->destroy($id);
+    }
+
     public function addInitiator(Request $request){ # ROLE=>3
         $USC = new MeetingInitiatorController();
         $USC->store($request);
+    }
+
+    public function deleteInitiator($id){ # ROLE=>3
+        $USC = new MeetingInitiatorController();
+        return $USC->destroy($id);
+    }
+
+    public function getControllers(){
+        $users = User::where(['role'=>'0'])->get();
+        return $users;
+    }
+
+    public function getAdmins(){
+        $users = User::where(['role'=>'1'])->get();
+        return $users;
+    }
+
+    public function getDoctors(){
+        $users = User::where(['role'=>'2'])->get();
+        return $users;
+    }
+
+    public function getInitiators(){
+        $users = User::where(['role'=>'3'])->get();
+        return $users;
     }
 
 }

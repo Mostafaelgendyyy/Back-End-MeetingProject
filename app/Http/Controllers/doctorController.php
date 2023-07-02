@@ -133,13 +133,16 @@ class doctorController extends Controller
         {
             $Doctor->delete();
         }
-
-        // ROUTING
-    }
-
-    public function voteforsubject(Request $request){
+        else {
+            return 'cannot delete this User';
+        }
 
     }
+//
+//    public function voteforsubject(Request $request){
+//        $csc= new containerSubjectController();
+//        $csc->voteAccept($request);
+//    }
 
 
 

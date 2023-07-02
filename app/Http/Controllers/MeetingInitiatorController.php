@@ -84,6 +84,9 @@ class MeetingInitiatorController extends doctorController
         {
             $Doctor->delete();
         }
+        else{
+            return 'cannot delete this User';
+        }
 
         // ROUTING
     }

@@ -44,7 +44,21 @@ Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
 
     Route::post('/addAdmin',[adminController::class,'addAdmin']);
 
-    Route::delete('/DELETE/{adminid}',[adminController::class,'destroy']);
+    Route::delete('/delete-doctor/{id}',[adminController::class,'deleteDoctor']);
+
+    Route::delete('/delete-initiator/{id}',[adminController::class,'deleteInitiator']);
+
+    Route::delete('/delete-admin/{id}',[adminController::class,'deleteAdmin']);
+
+    Route::delete('/delete-controller/{id}',[adminController::class,'deleteSubjectController']);
+
+    Route::get('/controllers',[adminController::class,'getControllers']);
+
+    Route::get('/admins',[adminController::class,'getAdmins']);
+
+    Route::get('/doctors',[adminController::class,'getDoctors']);
+
+    Route::get('/initiators',[adminController::class,'getInitiators']);
 
     Route::post('/update-profile/{id}',[UserController::class,'update']);
 
