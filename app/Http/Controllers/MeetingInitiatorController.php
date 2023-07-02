@@ -140,4 +140,15 @@ class MeetingInitiatorController extends doctorController
         $user= new UserController();
         $user->update($request,$Id);
     }
+
+    public function addAttendee(Request $request){
+        $INV = new InvitationNotificationsController();
+        $INV->putAttendance($request);
+    }
+
+    public function addAbsent(Request $request){
+        $INV = new InvitationNotificationsController();
+        $INV->putAbsent($request);
+    }
+
 }

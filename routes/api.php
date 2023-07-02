@@ -110,9 +110,13 @@ Route::prefix('meeting-initiator')->middleware(['auth','initiator'])->group(func
 
     Route::post('/change-password/{id}',[UserController::class,'changePassword']);
 
-    Route::post('voteaccept-meeting',[containerSubjectController::class,'voteAccept']);
+    Route::post('/voteaccept-meeting',[containerSubjectController::class,'voteAccept']);
 
-    Route::post('votereject-meeting',[containerSubjectController::class,'voteReject']);
+    Route::post('/votereject-meeting',[containerSubjectController::class,'voteReject']);
+
+    Route::post('/add-attendee',[MeetingInitiatorController::class,'addAttendee']);
+
+    Route::post('/add-absent',[MeetingInitiatorController::class,'addAbsent']);
 });
 
 

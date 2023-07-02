@@ -44,8 +44,7 @@ class InvitationNotificationsController extends Controller
 //        ]);
         $notification= new InvitationNotifications([
             'doctorid' => $request->get('doctorid'),
-            'meetingid'=> $request->get('meetingid'),
-            'status'=> $request->get('status')
+            'meetingid'=> $request->get('meetingid')
         ]);
         $notification->save();
         $mailer= new MeetingMailController();
@@ -92,7 +91,6 @@ class InvitationNotificationsController extends Controller
 //            'doctorid'=> 'required',
 //            'meetingid'=> 'required',
 //            'status'=> 'required',
-//            'reason'=> 'required'
 //        ]);
         $notification= InvitationNotifications::find($id);
         $notification->doctorid = $request->get('doctorid');
@@ -112,5 +110,27 @@ class InvitationNotificationsController extends Controller
         //
         $notification= InvitationNotifications::find($id);
         $notification->delete();
+    }
+
+    public function putAttendance(Request $request){
+        if ($request->get('status')!='null'){
+            return 'cannot change attendance';
+        }
+        InvitationNotifications::where(
+            [
+                ['doctorid',$request->get('doctorid')],
+                ['meetingid',$request->get('meetingid')]
+            ])->update('status',1);
+    }
+
+    public function putAbsent(Request $request){
+        if ($request->get('status')!='null'){
+            return 'cannot change attendance';
+        }
+        InvitationNotifications::where(
+            [
+                ['doctorid',$request->get('doctorid')],
+                ['meetingid',$request->get('meetingid')]
+            ])->update('status',0);
     }
 }
