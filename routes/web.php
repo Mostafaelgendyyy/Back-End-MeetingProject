@@ -35,3 +35,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //
 //Route::Delete('/logout', [AuthController::class, 'logout']);
 //Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('login/{id}',function ($id){
+    return "loggedin".$id;
+});

@@ -81,4 +81,13 @@ class UserController extends Controller
         ////////////////////// RETURN TO ROUTING Page access DONE
     }
 
+    public function UpdateUserROle(Request $request,$id)
+    {
+        $user= User::find($id);
+        $user->role= $request->get('role');
+        $user->adminstration= $request->get('adminstration');
+        $user->save();
+        ////////////////////// RETURN TO ROUTING Page access DONE
+    }
+
 }

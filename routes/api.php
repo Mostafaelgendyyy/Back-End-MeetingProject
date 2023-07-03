@@ -30,6 +30,7 @@ Route::middleware('Auth:api')->get('/user', function (Request $request) {
 
 /****************** ADMIN *****************/
 
+Route::post('/adddoctor',[adminController::class,'addDoctor']);
 Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
     Route::get('/Interface',[App\Http\Controllers\adminController::class, 'index']);
 
@@ -70,6 +71,8 @@ Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
     Route::post('/change-password/{id}',[UserController::class,'changePassword']);
 
     Route::get('/subjects/{containerID}',[containerSubjectController::class,'getSubjectsofContainer']);
+
+    Route::post('UpdateUSER/{id}',[UserController::class,'UpdateUserROle']);
 
 });
 
@@ -159,7 +162,31 @@ Route::prefix('subjectController')->middleware(['auth','subjectController'])->gr
 
 });
 
+//Route::get('/attachment/{id}',[subjectController::class,'getAttachments']);
+//
+//Route::post('create-subject',[subjectController::class,'store']);
 
+
+//
+//Route::post('redirect/{id}',[subjectController::class,'redirectSubject']);
+//
+//Route::get('subjects/{dept}',[subjectController::class,'getSubjectsforController']);
+//
+//Route::get('subjects-for-controller/{id}',[subjectControllerController::class,'getSubjects']);
+//
+//Route::get('upcoming-Meetings',[meetingController::class,'getUpcomingMeetings']);
+//
+//Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
+
+//Route::get('/previous-Meeting/{id}',[MeetingInitiatorController::class,'getPreviousMeeting']);
+
+//Route::get('prev/{id}',[InvitationNotificationsController::class,'findlastfordoctor']);
+//
+//Route::get('docprev/{id}',[doctorController::class,'getPreviousMeeting']);
+//
+//Route::get('DOne/{id}',[meetingController::class,'isDone']);
+
+Route::post('/addInitiator',[adminController::class,'addInitiator']);
 /*
  *
  *
@@ -172,6 +199,12 @@ Route::prefix('subjectController')->middleware(['auth','subjectController'])->gr
         "topic": "magls gam3a",
         "islast": 1
     }
+{
+    "name":"mohamedNour",
+    "email":"mohNour@gmail.com",
+    "password":"123456789",
+    "adminstration":"نظم المعلومات"
+}
  *
  *
  *

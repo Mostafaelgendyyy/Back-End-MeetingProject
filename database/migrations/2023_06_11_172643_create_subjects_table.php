@@ -15,7 +15,7 @@ class CreateSubjectsTable extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->id('subjectid');
-            $table->unsignedBigInteger('controllerid');
+            $table->unsignedBigInteger('controllerid')->nullable();
             $table->foreign('controllerid')->references('id')->on('users')->onDelete('cascade');
             $table->string('description');
             $table->string('subjecttype');
@@ -23,7 +23,7 @@ class CreateSubjectsTable extends Migration
             $table->boolean('isCompleted');
             $table->string('from');
             $table->string('to')->nullable();
-            $table->string('attachmentlink');
+            $table->string('attachmentlink')->nullable();
             $table->timestamps();
         });
     }
