@@ -159,27 +159,7 @@ Route::prefix('subjectController')->middleware(['auth','subjectController'])->gr
 
 });
 
-//Route::get('/attachment/{id}',[subjectController::class,'getAttachments']);
-//
-//Route::post('create-subject',[subjectController::class,'store']);
-//
-//Route::post('redirect/{id}',[subjectController::class,'redirectSubject']);
-//
-//Route::get('subjects/{dept}',[subjectController::class,'getSubjectsforController']);
-//
-//Route::get('subjects-for-controller/{id}',[subjectControllerController::class,'getSubjects']);
-//
-//Route::get('upcoming-Meetings',[meetingController::class,'getUpcomingMeetings']);
-//
-//Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
 
-//Route::get('/previous-Meeting/{id}',[MeetingInitiatorController::class,'getPreviousMeeting']);
-
-//Route::get('prev/{id}',[InvitationNotificationsController::class,'findlastfordoctor']);
-//
-//Route::get('docprev/{id}',[doctorController::class,'getPreviousMeeting']);
-//
-//Route::get('DOne/{id}',[meetingController::class,'isDone']);
 /*
  *
  *
