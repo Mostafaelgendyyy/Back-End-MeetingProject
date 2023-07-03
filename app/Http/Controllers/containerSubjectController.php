@@ -92,9 +92,9 @@ class containerSubjectController extends Controller
 //                'decision' =>'required'
 //            ]);
         $Container= containerSubjects::find($id);
-        $Container->controllerid = $request.get('containerid');
-        $Container->meetingid = $request.get('subjectid');
-        $Container->name = $request.get('decision');
+        $Container->controllerid = $request->get('containerid');
+        $Container->meetingid = $request->get('subjectid');
+        $Container->name = $request->get('decision');
         $Container->save();
 
     }

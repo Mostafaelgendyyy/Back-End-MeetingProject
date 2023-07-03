@@ -3,7 +3,6 @@
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use Cassandra\Uuid;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +35,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //Route::Delete('/logout', [AuthController::class, 'logout']);
 //Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('login/{id}',function ($id){
-    return "loggedin".$id;
-});
+//Route::get('login',function (){
+//    return "logged in";
+//});

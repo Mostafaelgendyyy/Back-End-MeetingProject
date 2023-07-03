@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -88,6 +89,45 @@ class UserController extends Controller
         $user->adminstration= $request->get('adminstration');
         $user->save();
         ////////////////////// RETURN TO ROUTING Page access DONE
+    }
+
+    public function login(Request $request){
+        $user= User::where('email',$request->get('email'))->first();
+        if(!$user || !Hash::check($request->get('password'),$user->password))
+        {
+            return response([
+                'error'=>['email or password is not matched']
+            ]);
+        }
+
+        $token = $user->createToken('browser')->plainTextToken;
+
+        $res = [
+            'user' => $user,
+            'token' => $token
+        ];
+
+        return response($res, 201);
+//        return $user;
+    }
+
+    public function logout()
+    {
+        try {
+           auth()->user()->tokens()->delete();
+            return response()->json([
+                'status'=>'true',
+                'message'=>'logged out Successfully',
+                'data'=>[]
+            ]);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                'status'=>'false',
+                'message'=>$e->getMessage(),
+                'data'=>[]
+            ],500);
+        }
     }
 
 }

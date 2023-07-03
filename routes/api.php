@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\InvitationNotificationsController;
 use App\Http\Controllers\meetingController;
 use App\Http\Controllers\subjectController;
@@ -31,7 +32,7 @@ Route::middleware('Auth:api')->get('/user', function (Request $request) {
 /****************** ADMIN *****************/
 
 Route::post('/adddoctor',[adminController::class,'addDoctor']);
-Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
+Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[App\Http\Controllers\adminController::class, 'index']);
 
     Route::get('/getAdmin/{adminid?}',[adminController::class,'show']);
@@ -79,7 +80,7 @@ Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
 
 /****************** Doctor *****************/
 
-Route::prefix('doctor')->middleware(['auth','doctor'])->group(function (){
+Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[doctorController::class, 'index']);
 
     Route::post('/update-profile/{id}',[UserController::class,'update']);
@@ -98,7 +99,7 @@ Route::prefix('doctor')->middleware(['auth','doctor'])->group(function (){
 
 /********************** Meeting initiator ******************/
 
-Route::prefix('meeting-initiator')->middleware(['auth','initiator'])->group(function (){
+Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
 
     Route::post('create-subject',[subjectController::class,'store']);
@@ -138,7 +139,7 @@ Route::prefix('meeting-initiator')->middleware(['auth','initiator'])->group(func
 
 /****************** Subject Controller *****************/
 
-Route::prefix('subjectController')->middleware(['auth','subjectController'])->group(function (){
+Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (){
 
     Route::get('/Interface',[subjectControllerController::class, 'index']);
 
@@ -186,7 +187,14 @@ Route::prefix('subjectController')->middleware(['auth','subjectController'])->gr
 //
 //Route::get('DOne/{id}',[meetingController::class,'isDone']);
 
-Route::post('/addInitiator',[adminController::class,'addInitiator']);
+//Route::post('/addInitiator',[adminController::class,'addInitiator']);
+
+
+
+//Route::post('reset',route('password.email'));
+
+//---->Route::post('/password/reset/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class,'reset']);
+
 /*
  *
  *
@@ -209,3 +217,15 @@ Route::post('/addInitiator',[adminController::class,'addInitiator']);
  *
  *
  */
+
+Route::post('login',[UserController::class,'login']);
+
+Route:: middleware('auth:sanctum')->group(function (){
+
+    Route::post('logout',[UserController::class,'logout']);
+
+});
+//Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgotpassword', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+////Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+////Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
