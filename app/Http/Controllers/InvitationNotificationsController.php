@@ -133,4 +133,8 @@ class InvitationNotificationsController extends Controller
                 ['meetingid',$request->get('meetingid')]
             ])->update('status',0);
     }
+
+    public function findlastfordoctor($id){
+        return InvitationNotifications::where('doctorid',$id)->select('meetingid')->get()->last();
+    }
 }

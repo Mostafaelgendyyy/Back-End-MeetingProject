@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvitationNotificationsController;
 use App\Http\Controllers\meetingController;
 use App\Http\Controllers\subjectController;
 use Illuminate\Http\Request;
@@ -124,6 +125,9 @@ Route::prefix('meeting-initiator')->middleware(['auth','initiator'])->group(func
     Route::post('/add-absent',[MeetingInitiatorController::class,'addAbsent']);
 
     Route::get('upcoming-Meetings',[meetingController::class,'getUpcomingMeetings']);
+
+    Route::get('/previous-Meeting/{id}',[MeetingInitiatorController::class,'getPreviousMeeting']);
+
 });
 
 
@@ -166,6 +170,14 @@ Route::prefix('subjectController')->middleware(['auth','subjectController'])->gr
 //Route::get('upcoming-Meetings',[meetingController::class,'getUpcomingMeetings']);
 //
 //Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
+
+//Route::get('/previous-Meeting/{id}',[MeetingInitiatorController::class,'getPreviousMeeting']);
+
+//Route::get('prev/{id}',[InvitationNotificationsController::class,'findlastfordoctor']);
+//
+//Route::get('docprev/{id}',[doctorController::class,'getPreviousMeeting']);
+//
+//Route::get('DOne/{id}',[meetingController::class,'isDone']);
 /*
  *
  *

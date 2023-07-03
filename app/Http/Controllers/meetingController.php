@@ -63,8 +63,8 @@ class meetingController extends Controller
     public function show($id)
     {
         //
-        $Meeting=meeting::find($id);
-        dd($Meeting);
+        return meeting::find($id);
+
     }
 
     /**
@@ -116,9 +116,12 @@ class meetingController extends Controller
         $Meeting->delete();
     }
 
+    public function updatePrev($id){
+        meeting::where([['initiatorid',$id],['islast',-1]])->update(['islast'=>'0']);
+    }
     public function updatelastofInitiator($id){
 
-        meeting::where([['initiatorid',$id],['islast',1]])->update(['islast'=>'0']);
+        meeting::where([['initiatorid',$id],['islast',1]])->update(['islast'=>'-1']);
     }
     public function getlastofInitiator($id){
 
@@ -131,5 +134,38 @@ class meetingController extends Controller
         return meeting::where('date', '>', $NowDT)->get();
     }
 
+    public function getPrevious($id){
+        return meeting::where([
+            ['initiatorid',$id],
+            ['islast',-1]
+        ])->get();
+    }
 
+    public function isLast($id){
+        $me= meeting::find($id);
+        if ($me->islast==1){
+            return true;
+        }
+        return false;
+    }
+
+    public function isPrevious($id){
+        $me= meeting::find($id);
+        if ($me->islast==-1){
+            return true;
+        }
+        return false;
+    }
+
+    public function isDone($id){
+        $me= meeting::find($id);
+        $NowDT = Carbon::now()->toDateString();
+        if ($me->date > $NowDT){
+            return true;
+        }
+        return false;
+    }
+    public function showInitiator($Id){
+        return meeting::where(['meetingid',$Id])->select('initiatorid');
+    }
 }

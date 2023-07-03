@@ -97,6 +97,7 @@ class MeetingInitiatorController extends doctorController
         $Initiatorid = $request->get('initiatorid');
         $MC= new meetingController();
         $last =$MC->getlastofInitiator($Initiatorid);
+        $MC->updatePrev($Initiatorid);
         $MC->updatelastofInitiator($Initiatorid);
         $MC->store($request);
         return $last;
@@ -150,5 +151,13 @@ class MeetingInitiatorController extends doctorController
         $INV = new InvitationNotificationsController();
         $INV->putAbsent($request);
     }
+
+    public function getPreviousMeeting($id){
+        $MC= new meetingController();
+        return $MC->getPrevious($id);
+    }
+
+
+
 
 }

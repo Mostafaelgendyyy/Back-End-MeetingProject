@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\doctor;
+use App\Models\InvitationNotifications;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -144,6 +145,19 @@ class doctorController extends Controller
 //        $csc->voteAccept($request);
 //    }
 
+
+    public function getPreviousMeeting($id){
+        $INC= new InvitationNotificationsController();
+        $meetingid= $INC->findlastfordoctor($id);
+        $MC= new meetingController();
+        $controller= $MC->showInitiator($meetingid);
+        return $controller;
+//        $bool=$MC->isDone($meetingid);
+////        if(==true){
+////            return $MC->show($meetingid);
+////        }
+//        return $bool;
+    }
 
 
 }
