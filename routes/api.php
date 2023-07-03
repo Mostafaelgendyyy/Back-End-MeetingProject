@@ -55,6 +55,8 @@ Route::prefix('admin')->middleware(['auth','admin'])->group(function (){
 
     Route::delete('/delete-controller/{id}',[adminController::class,'deleteSubjectController']);
 
+    Route::delete('delete-user/{id}',[UserController::class,'destroy']);
+
     Route::get('/controllers',[adminController::class,'getControllers']);
 
     Route::get('/admins',[adminController::class,'getAdmins']);

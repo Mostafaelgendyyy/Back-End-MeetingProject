@@ -78,7 +78,6 @@ class UserController extends Controller
     {
         $user= User::find($id);
         $user->delete();
-        $user->save();
         ////////////////////// RETURN TO ROUTING Page access DONE
     }
 
