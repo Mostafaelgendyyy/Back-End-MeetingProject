@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\containerSubjects;
 use App\Models\subject;
 use Illuminate\Http\Request;
 
@@ -47,9 +48,12 @@ class subjectController extends Controller
         $subject= new subject([
             'controllerid' => $request->get('controllerid'),
             'description' => $request->get('description'),
-            'finaldecision' => $request->get('finaldecision'),
-            'iscompleted' => $request->get('iscompleted'),
-            'from' => $request->get('from')
+            'subjecttype'=> $request->get('subjecttype'),
+            'iscompleted' => 0,
+            'to'=> $request->get('to'),
+            'finaldecision'=> $request->get('finaldecision'),
+            'from' => $request->get('from'),
+            'attachmentlink'=>$request->get('attachmentlink')
         ]);
         $subject->save();
 
@@ -110,6 +114,7 @@ class subjectController extends Controller
         $subject->finaldesicion= $request->get('finaldesicion');
         $subject->iscompleted= $request->get('iscompleted');
         $subject->from= $request->get('from');
+        $subject->to= $request->get('to');
         $subject->save();
     }
 
@@ -128,12 +133,29 @@ class subjectController extends Controller
 
     public function archive($id)
     {
-        subject::find($id)->update(["iscompleted" => "1"]);
+        $lastdecision= containerSubjects::select('decision')->where(['subjectid',$id])->last();
+        subject::find($id)->update(["iscompleted" => "1"],['finaldecision',$lastdecision]);
     }
 
     public function getAttachments($id){
         $subject= subject::find($id);
-        $subjectattach=$subject::select('attachment-link');
+        $subjectattach=$subject::select('attachment-link')->get();
         return $subjectattach;
     }
+
+    public function redirectSubject(Request $request,$id){
+        $subject=subject::find($id);
+        $deptfrom = $subject->to;
+        $subject->from=$deptfrom;
+        $subject->to= $request->get('to');
+        $subject->save();
+    }
+
+    public function getSubjectsforController($dept){
+        return subject::where([
+            ['to',$dept],
+            ['iscompleted',0]
+        ])->get();
+    }
+
 }

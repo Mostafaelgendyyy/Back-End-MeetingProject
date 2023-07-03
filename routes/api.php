@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\meetingController;
+use App\Http\Controllers\subjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
@@ -84,6 +86,7 @@ Route::prefix('doctor')->middleware(['auth','doctor'])->group(function (){
 
     Route::get('/subjects/{containerID}',[containerSubjectController::class,'getSubjectsofContainer']);
 
+    Route::get('upcoming-Meetings',[meetingController::class,'getUpcomingMeetings']);
 });
 
 
@@ -91,6 +94,8 @@ Route::prefix('doctor')->middleware(['auth','doctor'])->group(function (){
 
 Route::prefix('meeting-initiator')->middleware(['auth','initiator'])->group(function (){
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
+
+    Route::post('create-subject',[subjectController::class,'store']);
 
     Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
 
@@ -117,19 +122,26 @@ Route::prefix('meeting-initiator')->middleware(['auth','initiator'])->group(func
     Route::post('/add-attendee',[MeetingInitiatorController::class,'addAttendee']);
 
     Route::post('/add-absent',[MeetingInitiatorController::class,'addAbsent']);
+
+    Route::get('upcoming-Meetings',[meetingController::class,'getUpcomingMeetings']);
 });
 
 
 /****************** Subject Controller *****************/
 
 Route::prefix('subjectController')->middleware(['auth','subjectController'])->group(function (){
+
     Route::get('/Interface',[subjectControllerController::class, 'index']);
 
-    Route::post('/addsubject',[subjectControllerController::class,'AddSubject']);
+    Route::post('create-subject',[subjectController::class,'store']);
+
+    Route::get('subjects-for-controller/{id}',[subjectControllerController::class,'getSubjects']);
 
     Route::post('/archive/{id}',[subjectControllerController::class,'ArchiveSubject']);
 
     Route::post('/addSubject-in-Container',[subjectControllerController::class,'AddSubjecttoContainer']);
+
+    Route::post('redirect/{id}',[subjectController::class,'redirectSubject']);
 
     Route::delete('/remove-subject',[subjectControllerController::class,'RemoveSubjectFromContainer']);
 
@@ -137,15 +149,28 @@ Route::prefix('subjectController')->middleware(['auth','subjectController'])->gr
 
     Route::post('/change-password/{id}',[UserController::class,'changePassword']);
 
+    Route::get('subjects/{dept}',[subjectController::class,'getSubjectsforController']);
+
 });
 
-
-
-
+//Route::get('/attachment/{id}',[subjectController::class,'getAttachments']);
+//
+//Route::post('create-subject',[subjectController::class,'store']);
+//
+//Route::post('redirect/{id}',[subjectController::class,'redirectSubject']);
+//
+//Route::get('subjects/{dept}',[subjectController::class,'getSubjectsforController']);
+//
+//Route::get('subjects-for-controller/{id}',[subjectControllerController::class,'getSubjects']);
+//
+//Route::get('upcoming-Meetings',[meetingController::class,'getUpcomingMeetings']);
+//
+//Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
 /*
  *
  *
- *  {
+ *
+    {
         "meetingid": 14,
         "initiatorid": 2,
         "location": "Dokki",
@@ -153,4 +178,7 @@ Route::prefix('subjectController')->middleware(['auth','subjectController'])->gr
         "topic": "magls gam3a",
         "islast": 1
     }
+ *
+ *
+ *
  */

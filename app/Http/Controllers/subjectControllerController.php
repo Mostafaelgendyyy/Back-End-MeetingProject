@@ -125,10 +125,6 @@ class subjectControllerController extends Controller
         }
     }
     ///////////////////////////////////     CLASS DIAGRAM COntroller FUNCTIONALITYYY
-    public function AddSubject(Request $request){
-        $SC= new subjectController();
-        $SC->store($request);
-    }
 
     public function SearchSubject(String $desc){
         $SC= new subjectController();
@@ -149,6 +145,12 @@ class subjectControllerController extends Controller
     public function RemoveSubjectFromContainer($id){
         $CS= new containerSubjectController();
         $CS->destroy($id);
+    }
+
+    public function getSubjects($id){
+        $SC = User::find($id);
+        $controller= new subjectController();
+        return $controller->getSubjectsforController($SC->adminstration);
     }
 }
 

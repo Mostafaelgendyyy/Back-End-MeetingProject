@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\meeting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class meetingController extends Controller
 {
@@ -124,5 +125,11 @@ class meetingController extends Controller
         $filter = meeting::where([['initiatorid',$id],['islast',1]])->get();
         return $filter;
     }
+
+    public function getUpcomingMeetings(){
+        $NowDT = Carbon::now()->toDateString();
+        return meeting::where('date', '>', $NowDT)->get();
+    }
+
 
 }

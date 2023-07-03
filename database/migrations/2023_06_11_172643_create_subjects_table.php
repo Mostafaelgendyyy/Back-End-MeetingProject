@@ -18,13 +18,13 @@ class CreateSubjectsTable extends Migration
             $table->unsignedBigInteger('controllerid');
             $table->foreign('controllerid')->references('id')->on('users')->onDelete('cascade');
             $table->string('description');
-            $table->string('subject_Type');
-            $table->string('finaldecision');
+            $table->string('subjecttype');
+            $table->string('finaldecision')->nullable();
             $table->boolean('isCompleted');
             $table->string('from');
-            $table->string('attachment-link');
+            $table->string('to')->nullable();
+            $table->string('attachmentlink');
             $table->timestamps();
-
         });
     }
 
