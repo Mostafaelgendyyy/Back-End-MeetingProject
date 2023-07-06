@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\containerSubjects;
+use App\Models\meeting;
 use App\Models\subject;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class subjectController extends Controller
 {
@@ -34,9 +37,7 @@ class subjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    //
 //        $this->validate([
 //            'creatorid'=> 'required',
 //            'controllerid'=> 'required',
@@ -45,18 +46,50 @@ class subjectController extends Controller
 //            'iscompleted'=> 'required',
 //            'from'=> 'required'
 //        ]);
-        $subject= new subject([
-            'controllerid' => $request->get('controllerid'),
-            'description' => $request->get('description'),
-            'subjecttype'=> $request->get('subjecttype'),
-            'iscompleted' => 0,
-            'to'=> $request->get('to'),
-            'finaldecision'=> $request->get('finaldecision'),
-            'from' => $request->get('from'),
-            'attachmentlink'=>$request->get('attachmentlink')
-        ]);
-        $subject->save();
-
+    public function store(Request $request)
+    {
+        $creatorrole = User::select('role')->find($request->get('userid'));
+        if ($creatorrole['role']==3)
+        {
+            $lastmeeting = meeting::where('initiatorid',$request->get('userid'))->get()->last();
+            $NowDT = Carbon::now()->toDateString();
+            if ($NowDT < $lastmeeting['date']){
+                $MS= new MeetingSubjectsController();
+                $subject= new subject([
+                    'userid' => $request->get('userid'),
+                    'description' => $request->get('description'),
+                    'subjecttype'=> $request->get('subjecttype'),
+                    'iscompleted' => 1,
+                    'attachmentlink'=>$request->get('attachmentlink')
+                ]);
+//            return $lastmeeting['meetingid'];
+                $subject->save();
+                $subid= subject::select('subjectid')->where('userid',$request->get('userid'))->get()->last();
+                $requestforSubject= new Request();
+                $requestforSubject->merge(['meetingid'=>strval($lastmeeting['meetingid']),'subjectid'=>strval($subid['subjectid'])]);
+                $MS->store($requestforSubject);
+            }
+            else{
+                $subject= new subject([
+                    'userid' => $request->get('userid'),
+                    'description' => $request->get('description'),
+                    'subjecttype'=> $request->get('subjecttype'),
+                    'iscompleted' => 0,
+                    'attachmentlink'=>$request->get('attachmentlink')
+                ]);
+                $subject->save();
+            }
+        }
+        else{
+            $subject= new subject([
+                'userid' => $request->get('userid'),
+                'description' => $request->get('description'),
+                'subjecttype'=> $request->get('subjecttype'),
+                'iscompleted' => 0,
+                'attachmentlink'=>$request->get('attachmentlink')
+            ]);
+            $subject->save();
+        }
     }
 
     /**
@@ -69,14 +102,15 @@ class subjectController extends Controller
     {
         //
         $subject=subject::find($id);
-        dd($subject);
+        return $subject;
     }
 
     public function showByDesc($Desc)
     {
         //
-        $subject=subject::where('description',$Desc);
-        dd($subject);
+        $subject = subject::where('description', 'LIKE', '%'.$Desc.'%')
+            ->get();
+        return $subject;
     }
     /**
      * Show the form for editing the specified resource.
@@ -98,23 +132,11 @@ class subjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-//        $this->validate([
-//            'creatorid'=> 'required',
-//            'controllerid'=> 'required',
-//            'description'=> 'required',
-//            'finaldesicion'=> 'required',
-//            'iscompleted'=> 'required',
-//            'from'=> 'required'
-//        ]);
         $subject= subject::find($id);
-        $subject->creatorid = $request->get('creatorid');
         $subject->controllerid= $request->get('controllerid');
         $subject->description= $request->get('description');
         $subject->finaldesicion= $request->get('finaldesicion');
         $subject->iscompleted= $request->get('iscompleted');
-        $subject->from= $request->get('from');
-        $subject->to= $request->get('to');
         $subject->save();
     }
 
@@ -136,6 +158,8 @@ class subjectController extends Controller
         $lastdecision= containerSubjects::select('decision')->where(['subjectid',$id])->last();
         subject::find($id)->update(["iscompleted" => "1"],['finaldecision',$lastdecision]);
     }
+
+    //public function getArchived()
 
     public function getAttachments($id){
         $subject= subject::find($id);

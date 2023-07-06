@@ -44,7 +44,9 @@ class InvitationNotificationsController extends Controller
 //        ]);
         $notification= new InvitationNotifications([
             'doctorid' => $request->get('doctorid'),
-            'meetingid'=> $request->get('meetingid')
+            'meetingid'=> $request->get('meetingid'),
+            'fromoutside'=> $request->get('fromoutside')
+
         ]);
         $notification->save();
         $mailer= new MeetingMailController();

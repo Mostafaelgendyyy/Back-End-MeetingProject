@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class InvitationNotifications extends Model
+class MeetingSubjects extends Model
 {
     use HasFactory;
-    protected $fillable = ['doctorid','meetingid','status','fromoutside'];
-    public $timestamps = false;
 
+    protected $fillable = ['meetingid','subjectid','decision'];
+
+    public $timestamps = false;
 }

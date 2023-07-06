@@ -21,6 +21,9 @@ class CreateMeetingsTable extends Migration
             $table->date('date');
             $table->string('topic');
             $table->tinyInteger('islast'); # ---> 0 no , 1 yes
+            $table->string('meetingtype');
+            $table->time('startedtime')->default('00:00:00');
+            $table->time('endedtime')->default('00:00:00')->nullable();
         });
     }
 

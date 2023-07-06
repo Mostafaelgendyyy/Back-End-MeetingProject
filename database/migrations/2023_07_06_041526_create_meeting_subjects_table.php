@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContainerSubjectsTable extends Migration
+class CreateMeetingSubjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateContainerSubjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('container_subjects', function (Blueprint $table) {
+        Schema::create('meeting_subjects', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('containerid');
-            $table->foreign('containerid')->references('containerid')->on('containers')->onDelete('cascade');
+            $table->unsignedBigInteger('meetingid');
+            $table->foreign('meetingid')->references('meetingid')->on('meetings')->onDelete('cascade');
             $table->unsignedBigInteger('subjectid');
             $table->foreign('subjectid')->references('subjectid')->on('subjects')->onDelete('cascade');
-            $table->integer('votes-accepted');
-            $table->integer('votes-rejected');
-            $table->string('decision');
+            $table->string('decision')->nullable();
         });
     }
 
@@ -32,6 +30,6 @@ class CreateContainerSubjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('container_subjects');
+        Schema::dropIfExists('meeting_subjects');
     }
 }

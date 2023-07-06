@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContainersTable extends Migration
+class CreateInvitationNotificationInvitedsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateContainersTable extends Migration
      */
     public function up()
     {
-        Schema::create('containers', function (Blueprint $table) {
-            $table->id('containerid');
-            $table->unsignedBigInteger('controllerid');
-            $table->foreign('controllerid')->references('id')->on('users')->onDelete('cascade');
+        Schema::create('invitation_notification_inviteds', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('invitedid');
+            $table->foreign('invitedid')->references('id')->on('inviteds')->onDelete('cascade');
             $table->unsignedBigInteger('meetingid');
             $table->foreign('meetingid')->references('meetingid')->on('meetings')->onDelete('cascade');
-            $table->string('name');
         });
     }
 
@@ -30,6 +29,6 @@ class CreateContainersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('containers');
+        Schema::dropIfExists('invitation_notification_inviteds');
     }
 }

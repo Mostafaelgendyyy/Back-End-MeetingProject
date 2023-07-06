@@ -15,14 +15,11 @@ class CreateSubjectsTable extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->id('subjectid');
-            $table->unsignedBigInteger('controllerid')->nullable();
-            $table->foreign('controllerid')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('userid')->nullable();
+            $table->foreign('userid')->references('id')->on('users')->onDelete('cascade');
             $table->string('description');
             $table->string('subjecttype');
-            $table->string('finaldecision')->nullable();
             $table->boolean('isCompleted');
-            $table->string('from');
-            $table->string('to')->nullable();
             $table->string('attachmentlink')->nullable();
             $table->timestamps();
         });

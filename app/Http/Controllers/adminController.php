@@ -207,4 +207,27 @@ class adminController extends Controller
         return $users;
     }
 
+
+    public function addAdminstration(Request $request){
+        $AC= new AdminstrationController();
+        $AC->store($request);
+    }
+
+    public function deleteAdminstration($id){
+        $AC= new AdminstrationController();
+        $AC->destroy($id);
+    }
+
+
+
+    public function addPlace(Request $request){
+        $PC = new PlaceController();
+        $PC->store($request);
+    }
+
+    public function deletePlace($id){
+        $PC = new PlaceController();
+        $PC->destroy($id);
+    }
+
 }

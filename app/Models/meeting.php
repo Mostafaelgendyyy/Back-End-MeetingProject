@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class meeting extends Model
 {
     use HasFactory;
-    protected $fillable = ['meetingid','initiatorid','location','date','topic','islast'];
+    protected $fillable = ['meetingid','initiatorid','location','date','topic','islast','meetingtype','startedtime','startedtime'];
     public $timestamps = false;
 
     protected $primaryKey = 'meetingid';

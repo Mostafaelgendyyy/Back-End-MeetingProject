@@ -44,6 +44,7 @@ class meetingController extends Controller
 //            'topic'=> 'required'
 //        ]);
 
+
         $Meeting = new meeting([
             'initiatorid' => $request->get('initiatorid'),
             'location'=> $request->get('location'),
@@ -52,6 +53,7 @@ class meetingController extends Controller
             'islast'=>'1'
         ]);
         $Meeting->save();
+
     }
 
     /**
