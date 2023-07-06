@@ -84,8 +84,6 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 
     Route::post('UpdateUSER/{id}',[UserController::class,'UpdateUserROle']);
 
-
-
     Route::post('addPlace',[adminController::class,'addPlace']);
 
     Route::get('deletePlace/{id}',[adminController::class,'deletePlace']);
@@ -120,11 +118,10 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
 
     Route::get('upcoming-Meetings',[meetingController::class,'getUpcomingMeetings']);
 
+    Route::get('/notifications/{id}',[doctorController::class,'getNotification']);
 
 });
-Route::get('/notifications/{id}',[doctorController::class,'getNotification']);
-Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
-Route::post('create-subject',[subjectController::class,'store']);
+
 /********************** Meeting initiator ******************/
 Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
@@ -134,6 +131,12 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
     Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
 
     Route::post('/request-doctor',[MeetingInitiatorController::class,'RequestDoctor']);
+
+    Route::post('CreateGroup',[MeetingInitiatorController::class,'makegroup']);
+
+    Route::post('addGroupUsers',[MeetingInitiatorController::class,'adduserstogroup']);
+
+    Route::delete('deleted/{initiatorid}/{userid}', [MeetingInitiatorController::class,'deletefromGroup']);
 
     Route::get('RequestGroup/{initiatorid}/{meetingid}',[MeetingInitiatorController::class,'requestGroupforMeeting']);
 
@@ -155,26 +158,19 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::get('Archived/{initiatorid}',[subjectController::class,'showArchive']);
 
-    Route::post('CreateGroup',[MeetingInitiatorController::class,'makegroup']);
-
-    Route::post('addGroupUsers',[MeetingInitiatorController::class,'adduserstogroup']);
-
-    Route::delete('deleted/{initiatorid}/{userid}', [MeetingInitiatorController::class,'deletefromGroup']);
-
     Route::get('SubjectsData/{id}',[subjectController::class,'show']);
 
-    Route::get('currentMeeting',[meetingController::class,'RetreivedataforLast']);
+    Route::get('currentMeeting/{id}',[meetingController::class,'RetreivedataforLast']);
 
     Route::post('end-meeting',[meetingController::class,'FinalizeMeeting']);
 
-    Route::get('PDFData/{initiatorid}',[meetingController::class,'DataPreviousforPDF']);
+    Route::get('InitPDFData/{initiatorid}',[meetingController::class,'DataPreviousforPDF']);
 
 
 });
+//-->Route::post('end-meeting',[meetingController::class,'FinalizeMeeting']);
 
-Route::post('end-meeting',[meetingController::class,'FinalizeMeeting']);
-
-Route::get('currentMeeting',[meetingController::class,'RetreivedataforLast']);
+Route::get('currentMeeting/{id}',[meetingController::class,'RetreivedataforLast']);
 
 Route::get('Archived/{initiatorid}',[subjectController::class,'showArchive']);
 
@@ -201,8 +197,7 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
 
     Route::get('Subjects/{controllerid}',[subjectControllerController::class,'getSubjects']);
 
-    Route::get('PDFData/{initiatorid}',[meetingController::class,'DataPreviousforPDF']);
-
+    Route::get('ControllerPDFData/{id}',[subjectControllerController::class,'getPrevPDF']);
 
 });
 
@@ -262,7 +257,6 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
  *
  *
  */
-Route::get('PDFData/{initiatorid}',[meetingController::class,'DataPreviousforPDF']);
 
 Route::post('login',[UserController::class,'login']);
 

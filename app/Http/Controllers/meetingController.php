@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\InvitationNotificationInvited;
 use App\Models\InvitationNotifications;
+use App\Models\Invited;
 use App\Models\meeting;
 use App\Models\MeetingSubjects;
 use App\Models\subject;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -178,8 +180,7 @@ class meetingController extends Controller
     public function RetreivedataforLast($initiatorid){
         $last = meeting::select('meetingid')->where([
             ['initiatorid',$initiatorid],
-            ['islast',1],
-            ['endedtime',null]
+            ['islast',1]
         ])->get();
         foreach($last as $key=>$value)
         {
@@ -228,21 +229,30 @@ class meetingController extends Controller
         foreach($last as $key=>$value)
         {
             $subjects = MeetingSubjects::where('meetingid',$value['meetingid'])->get();
-            $subjectData='';
+            $subjectData=array();
             foreach($subjects as $k =>$v)
             {
-                $subjectData= subject::find($v['subjectid']);
+                array_push($subjectData, subject::find($v['subjectid']));
             }
             $attendee= InvitationNotifications::where([
                 ['meetingid',$value['meetingid']],
                 ['fromoutside',0],
                 ['status',1]
             ])->get();
+            $attendeeData=array();
+            foreach($attendee as $k =>$v)
+            {
+                array_push($attendeeData, User::find($v['doctorid']));
+            }
             $absence= InvitationNotifications::where([
                 ['meetingid',$value['meetingid']],
                 ['status',0]
             ])->get();
-
+            $absenceData=array();
+            foreach($absence as $k =>$v)
+            {
+                array_push($absenceData, User::find($v['doctorid']));
+            }
             $InvitedUsers = InvitationNotifications::where([
                 ['meetingid',$value['meetingid']],
                 ['fromoutside',1]
@@ -250,12 +260,25 @@ class meetingController extends Controller
             $Invited= InvitationNotificationInvited::where([
                 ['meetingid',$value['meetingid']],
             ])->get();
+            $invitedData=array();
+            foreach($InvitedUsers as $k =>$v)
+            {
+                array_push($invitedData, User::find($v['doctorid']));
+            }
+
+            foreach($Invited as $k =>$v)
+            {
+                array_push($invitedData, Invited::find($v['invitedid']));
+            }
             return [
                 'subjects'=>$subjects,
                 'subjectsData'=>$subjectData,
                 'attendee'=>$attendee,
+                'attendeeData'=>$attendeeData,
                 'absence'=>$absence,
-                'invited'=>[$Invited,$InvitedUsers]
+                'absenceData'=>$absenceData,
+                'invited'=>[$InvitedUsers,$Invited],
+                'invitedData'=>$invitedData
             ];
         }
     }

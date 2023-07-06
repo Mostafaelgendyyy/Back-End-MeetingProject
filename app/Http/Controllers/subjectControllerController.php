@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\meeting;
+use App\Models\MeetingSubjects;
+use App\Models\subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\subjectController;
@@ -149,6 +152,22 @@ class subjectControllerController extends Controller
     public function getSubjects($id){
         $controller= new subjectController();
         return $controller->getSubjects($id);
+    }
+
+    public function getPrevPDF($id){
+        $lastsubjectWritten = subject::where([
+            ['userid',$id],
+            ['iscompleted',1]
+        ])->get()->last();
+
+        $meetingid = MeetingSubjects::where('subjectid',$lastsubjectWritten->subjectid)->get();
+        $MIC= new MeetingController();
+        foreach ($meetingid as $k=> $v)
+        {
+            $initiator = meeting::select('initiatorid')->find($v['meetingid']);
+            return $MIC->DataPreviousforPDF($initiator['initiatorid']);
+        }
+
     }
 }
 
