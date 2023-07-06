@@ -91,6 +91,10 @@ class UserController extends Controller
         ////////////////////// RETURN TO ROUTING Page access DONE
     }
 
+    public function usersbyAdminstration($admintrationId)
+    {
+        return $Users = User::where('adminstration',$admintrationId)->get();
+    }
     public function login(Request $request){
         $user= User::where('email',$request->get('email'))->first();
         if(!$user || !Hash::check($request->get('password'),$user->password))

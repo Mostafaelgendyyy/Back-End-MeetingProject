@@ -131,26 +131,24 @@ class subjectControllerController extends Controller
         $SC->showByDesc($desc);
     }
 
-    public function ArchiveSubject($id){
 
-        $SC = new \App\Http\Controllers\subjectController();
-        $SC->archive($id);
+
+    public function AddSubjecttoMeeting(Request $request){
+        $CS= new MeetingSubjectsController();
+        $data= $request->all();
+        foreach ($data as $Key=>$value){
+            $CS->store($value);
+        }
     }
 
-    public function AddSubjecttoContainer(Request $request){
-        $CS= new containerSubjectController();
-        $CS->store($request);
-    }
-
-    public function RemoveSubjectFromContainer($id){
-        $CS= new containerSubjectController();
+    public function RemoveSubjectFromMeeting($id){
+        $CS= new MeetingSubjectsController();
         $CS->destroy($id);
     }
 
     public function getSubjects($id){
-        $SC = User::find($id);
         $controller= new subjectController();
-        return $controller->getSubjectsforController($SC->adminstration);
+        return $controller->getSubjects($id);
     }
 }
 

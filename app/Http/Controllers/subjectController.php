@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\containerSubjects;
 use App\Models\meeting;
+use App\Models\MeetingSubjects;
 use App\Models\subject;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -153,10 +154,24 @@ class subjectController extends Controller
         $subject->delete();
     }
 
-    public function archive($id)
-    {
-        $lastdecision= containerSubjects::select('decision')->where(['subjectid',$id])->last();
-        subject::find($id)->update(["iscompleted" => "1"],['finaldecision',$lastdecision]);
+    public function getSubjects($controllerid){
+        $controllerAdminstration = User::select('adminstration')->find($controllerid);
+
+        $subjects= subject::select('subjectid','userid')
+            ->where('iscompleted',0)->get();
+        $IDS = array();
+        foreach ($subjects as $key=>$value){
+            $users= User::select('adminstration')->find($value['userid']);
+
+            //return $controllerAdminstration ;
+
+            if ($users['adminstration'] == $controllerAdminstration['adminstration'])
+            {
+                array_push($IDS,$value['subjectid']);
+            }
+
+        }
+        return subject::find($IDS);
     }
 
     //public function getArchived()
@@ -175,11 +190,44 @@ class subjectController extends Controller
         $subject->save();
     }
 
-    public function getSubjectsforController($dept){
-        return subject::where([
-            ['to',$dept],
-            ['iscompleted',0]
-        ])->get();
+
+    public function showArchive($initiatorid){
+
+        $intiatorAdminstration = User::select('adminstration')->find($initiatorid);
+
+        $subjects= subject::select('subjectid','userid')
+            ->where('iscompleted',1)->get();
+        $IDS = array();
+        foreach ($subjects as $key=>$value){
+            $users= User::select('adminstration')->find($value['userid']);
+
+            //return $controllerAdminstration ;
+
+            if ($users['adminstration'] == $intiatorAdminstration['adminstration'])
+            {
+                array_push($IDS,$value['subjectid']);
+            }
+
+        }
+
+        $meetingIDs= meeting::select('meetingid')->where('meetingtype','مجلس كلية')->get();
+
+
+        foreach($meetingIDs as $key=>$value){
+            $subjects= MeetingSubjects::where('meetingid',$value['meetingid'])->get();
+            foreach($subjects as $k =>$v)
+            {
+                array_push($IDS,$v['subjectid']);
+
+            }
+
+        }
+
+        return MeetingSubjects::whereIn('subjectid',$IDS)->get();
+
+
+
     }
+
 
 }

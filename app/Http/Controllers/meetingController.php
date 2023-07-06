@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InvitationNotificationInvited;
+use App\Models\InvitationNotifications;
 use App\Models\meeting;
+use App\Models\MeetingSubjects;
+use App\Models\subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -169,5 +173,90 @@ class meetingController extends Controller
     }
     public function showInitiator($Id){
         return meeting::where(['meetingid',$Id])->select('initiatorid');
+    }
+
+    public function RetreivedataforLast($initiatorid){
+        $last = meeting::select('meetingid')->where([
+            ['initiatorid',$initiatorid],
+            ['islast',1],
+            ['endedtime',null]
+        ])->get();
+        foreach($last as $key=>$value)
+        {
+            $subjects = MeetingSubjects::where('meetingid',$value['meetingid'])->get();
+            return $subjects;
+        }
+    }
+
+    public function addEnded($id)
+    {
+        $NowDT = Carbon::now()->toDateString();
+        $meeting = meeting::find($id);
+        $meeting->endedtime= $NowDT;
+        $meeting->save();
+    }
+
+
+
+    public function FinalizeMeeting(Request $request)
+    {
+        $data= $request->all();
+        $MS= new MeetingSubjectsController();
+        $meetingid= 0;
+        foreach($data as $key => $value){
+            $newRequest= new Request();
+            $meetingid=$value['meetingid'];
+            $newRequest->merge(['subjectid'=>strval($value['subjectid']),'meetingid'=>strval($value['meetingid'])]);
+            $MS->update($newRequest,$value['id']);
+        }
+        $this->addEnded($meetingid);
+        $initiatorid = meeting::select('initiatorid')->find($meetingid);
+        $this->updatePrev($initiatorid);
+        $this->updatelastofInitiator($initiatorid);
+    }
+
+
+
+    /************* PRevious ********/
+
+    public function DataPreviousforPDF ($initiatorid){
+        $last = meeting::select('meetingid')->where([
+            ['initiatorid',$initiatorid],
+            ['islast',-1]
+        ])->get();
+
+        foreach($last as $key=>$value)
+        {
+            $subjects = MeetingSubjects::where('meetingid',$value['meetingid'])->get();
+            $subjectData='';
+            foreach($subjects as $k =>$v)
+            {
+                $subjectData= subject::find($v['subjectid']);
+            }
+            $attendee= InvitationNotifications::where([
+                ['meetingid',$value['meetingid']],
+                ['fromoutside',0],
+                ['status',1]
+            ])->get();
+            $absence= InvitationNotifications::where([
+                ['meetingid',$value['meetingid']],
+                ['status',0]
+            ])->get();
+
+            $InvitedUsers = InvitationNotifications::where([
+                ['meetingid',$value['meetingid']],
+                ['fromoutside',1]
+            ])->get();
+            $Invited= InvitationNotificationInvited::where([
+                ['meetingid',$value['meetingid']],
+            ])->get();
+            return [
+                'subjects'=>$subjects,
+                'subjectsData'=>$subjectData,
+                'attendee'=>$attendee,
+                'absence'=>$absence,
+                'invited'=>[$Invited,$InvitedUsers]
+            ];
+        }
     }
 }

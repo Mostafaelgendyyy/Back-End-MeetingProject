@@ -76,9 +76,17 @@ class MeetingSubjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,$id)
     {
         //
+        $MS=MeetingSubjects::find($id);
+//        $MS= MeetingSubjects::where([
+//            ['subjectid',$request->get('subjectid')],
+//            ['meetingid',$request->get('meetingid')]
+//        ])->get();
+
+        $MS->decision = $request->get('decision');
+        $MS->save();
     }
 
     /**

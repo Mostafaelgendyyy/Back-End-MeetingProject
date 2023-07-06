@@ -105,27 +105,6 @@ class MeetingInitiatorController extends doctorController
         return $last;
     }
 
-    public function createContainer(Request $request){
-        $CC= new containerController();
-        $CC->store($request);
-    }
-
-
-    public function AddSubjecttoContainer(Request $request){
-        $CS= new containerSubjectController();
-        $CS->store($request);
-    }
-
-    public function RemoveSubjectFromContainer($id){
-        $CS= new containerSubjectController();
-        $CS->destroy($id);
-    }
-
-    public function deleteContainer($id){
-        $CC= new containerController();
-        $CC->destroy($id);
-    }
-
     public function deleteMeeting($id){
         $MC= new meetingController();
         $MC->destroy($id);
@@ -257,10 +236,6 @@ class MeetingInitiatorController extends doctorController
             $newRequest->merge(['groupid'=>strval($value['id']),'doctorid'=>strval($userid)]);
             return $GU->destroyBYRequest($newRequest);
         }
-
-
-
-
 
     }
 
