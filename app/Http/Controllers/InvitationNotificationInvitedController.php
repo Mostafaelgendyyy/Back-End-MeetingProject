@@ -35,7 +35,6 @@ class InvitationNotificationInvitedController extends Controller
      */
     public function store(Request $request)
     {
-        //
 
         $notification= new InvitationNotificationInvited([
             'invitedid' => $request->get('invitedid'),
