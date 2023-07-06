@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\group;
+use App\Models\groupuser;
 use App\Models\InvitationNotifications;
 use App\Models\meeting;
 use App\Models\User;
@@ -107,10 +109,7 @@ class MeetingInitiatorController extends doctorController
         $CC= new containerController();
         $CC->store($request);
     }
-    public function RequestDoctor(Request $request){
-        $Invitation= new InvitationNotificationsController();
-        $Invitation->store($request);
-    }
+
 
     public function AddSubjecttoContainer(Request $request){
         $CS= new containerSubjectController();
@@ -156,8 +155,135 @@ class MeetingInitiatorController extends doctorController
         $MC= new meetingController();
         return $MC->getPrevious($id);
     }
+/********* new **********/
+    public function makegroup(Request $request){
+        $GC= new GroupController();
+        $GC->store($request);
+    }
+
+    public function adduserstogroup(Request $request){
+        $GC= new GroupUserController();
+
+        $data = $request->all();
+
+        foreach ($data as $key => $value) {
+            $newRequest= new Request();
+            $newRequest->merge(['name'=>$value['name'],'email'=>$value['email'],'jobdescription'=>$value['jobdescription']]);
+            $GC->store($newRequest);
+        }
+    }
+
+    public function requestGroupforMeeting($initiatorid, $meetingid){
+        $GC= new GroupController();
+        $data= $GC->searchbyinitiator($initiatorid);
+        $Invitation= new InvitationNotificationsController();
+        $initiatorAdminstration = User::select('adminstration')->find($initiatorid);
+        foreach ($data as $id){
+            $request = new Request();
+            $doctorAdminstration= User::select('adminstration')->find($id['id']);
+            $fromOutside=1;
+            if($initiatorAdminstration == $doctorAdminstration){
+                $fromOutside= 0;
+            }
+            $request->merge(['doctorid'=>strval($id['id']),'meetingid'=>$meetingid, 'fromoutside'=>strval($fromOutside)]);
+//            return $request;
+            $Invitation->store($request);
+        }
+
+    }
+
+
+    public function RequestDoctor(Request $request,$initiatorid){
+        $Invitation= new InvitationNotificationsController();
+        $initiatorAdminstration = User::select('adminstration')->find($initiatorid);
+        $data = $request->all();
+
+
+        if(count($data)>1)
+        {
+            foreach ($data as $key => $value) {
+                $newrequest = new Request();
+                $fromOutside=1;
+                $doctorAdminstration= User::select('adminstration')->find($value['doctorid']);
+                if($initiatorAdminstration == $doctorAdminstration){
+                    $fromOutside= 0;
+                }
+                $newrequest->merge(['doctorid'=>strval($value['doctorid']),'meetingid'=>strval($value['meetingid']), 'fromoutside'=>strval($fromOutside)]);
+//                return $newrequest;
+                $Invitation->store($newrequest);
+            }
+        }
+//        else if (count($data)==1){
+//            $doctorAdminstration='';
+//            $newrequest = new Request();
+//            foreach ($data as $id){
+//                $doctorAdminstration= User::select('adminstration')->find($id['doctorid']);
+//                if($initiatorAdminstration == $doctorAdminstration){
+//                    $fromOutside= 0;
+//                }
+//
+//                $newrequest->merge(['doctorid'=>strval($id['doctorid']),'meetingid'=>strval($id['meetingid']), 'fromoutside' => strval(0)]);
+//            }
+////            return $newrequest;
+//            $Invitation->store($newrequest);
+//        }
+
+    }
+
+    public function RequestInvited(Request $request){
+        $Invitation= new InvitationNotificationInvitedController();
+//        $Invitation->store($request);
+        $data = $request->all();
+
+        if(count($data)>1){
+            foreach ($data as $key => $value){
+                $newRequest= new Request();
+                $newRequest->merge(['invitedid'=>strval($value['invitedid']),'meetingid'=>strval($value['meetingid'])]);
+                $Invitation->store($newRequest);
+            }
+        }
+//        else if (count($data) == 1) {
+//            $Invitation->store($request);
+//        }
+
+    }
+
+    public function deletefromGroup($initiatorid, $userid){
+        $groupid=group::select('id')->where('initiatorid',$initiatorid)->get();
+        $GU= new GroupUserController();
+        foreach ($groupid as $key =>$value){
+            //return $value['id'];
+            $newRequest = new Request();
+            $newRequest->merge(['groupid'=>strval($value['id']),'doctorid'=>strval($userid)]);
+            return $GU->destroyBYRequest($newRequest);
+        }
 
 
 
+
+
+    }
 
 }
+
+/*
+ * ,
+    {
+    "invitedid":"2",
+    "meetingid":"1"
+    },
+    {
+        "invitedid":"3",
+        "meetingid":"1"
+    }
+ */
+/*
+ * {
+        "doctorid":"1",
+        "meetingid":"1"
+    },
+    {
+        "doctorid":"2",
+        "meetingid":"1"
+    }
+ */

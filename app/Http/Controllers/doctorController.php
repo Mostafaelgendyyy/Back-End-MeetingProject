@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\doctor;
 use App\Models\InvitationNotifications;
+use App\Models\meeting;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -159,5 +160,26 @@ class doctorController extends Controller
 //        return $bool;
     }
 
+
+    public function getNotification($id){
+        $meetings= InvitationNotifications::select('meetingid')->where('doctorid',$id)->get();
+        $meetingsData= meeting::find($meetings);
+
+        $initiatorsIDs= meeting::select('initiatorid')->find($meetings);
+        $initiators= User::find($initiatorsIDs);
+
+        $Returned = [];
+        for($i = 0; $i < count($meetingsData); $i++) {
+            $Returned[] = [
+                'meeing' => $meetingsData[$i],
+                'initiator' => $initiators[$i]
+            ];
+        }
+//        return [
+//            "Meetings" => $meetingsData,
+//            "Initiators"=> $initiators
+//        ];
+        return $Returned;
+    }
 
 }
