@@ -214,7 +214,7 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::get('invited',[InvitedController::class,'viewall']);
 
-    Route::get('deleted/{initiatorid}/{userid}', [MeetingInitiatorController::class,'deletefromGroup']);
+    Route::delete('deleted/{initiatorid}/{userid}', [MeetingInitiatorController::class,'deletefromGroup']);
 });
 //Route::post('Request-invited',[MeetingInitiatorController::class,'RequestInvited']);
 //Route::get('invited',[InvitedController::class,'viewall']);
