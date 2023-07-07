@@ -55,9 +55,9 @@ class meetingController extends Controller
             'initiatorid' => $request->get('initiatorid'),
             'location'=> $request->get('location'),
             'date'=> $request->get('date'),
-            'topic'=> $request->get('topic'),
             'meetingtype'=> $request->get('meetingtype'),
-            'islast'=>'1'
+            'islast'=>'1',
+            'startedtime'=>$request->get('startedtime')
         ]);
         $Meeting->save();
 
@@ -138,9 +138,13 @@ class meetingController extends Controller
         return $filter;
     }
 
-    public function getUpcomingMeetings(){
+    public function getUpcomingMeetingsforcontroller($id){
         $NowDT = Carbon::now()->toDateString();
-        return meeting::where('date', '>', $NowDT)->get();
+        $initiatordept = User::select('adminstrationid')->find($id);
+        return meeting::where([
+            ['date', '>', $NowDT],
+            [User::select('adminstrationid')->find($id),$initiatordept['adminstrationid']]
+        ])->get();
     }
 
     public function getPrevious($id){

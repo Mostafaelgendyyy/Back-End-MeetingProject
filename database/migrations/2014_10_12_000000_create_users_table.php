@@ -23,7 +23,8 @@ class CreateUsersTable extends Migration
              */
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('adminstration')->nullable();
+            $table->unsignedBigInteger('adminstrationid');
+            $table->foreign('adminstrationid')->references('id')->on('adminstrations')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

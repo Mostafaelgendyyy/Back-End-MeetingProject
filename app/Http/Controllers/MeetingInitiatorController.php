@@ -26,7 +26,7 @@ class MeetingInitiatorController extends doctorController
 //                'adminstration' =>'required',
 //            ]);
         $Doctor = new User([
-            'adminstration' =>$request->get('adminstration'),
+            'adminstrationid' =>$request->get('adminstrationid'),
             'email' =>$request->get('email'),
             'password' =>$request->get('password'),
             'role' =>'3',
@@ -66,7 +66,7 @@ class MeetingInitiatorController extends doctorController
             $Doctor->name =$request->get('name');
             $Doctor->email =$request->get('email');
             $Doctor->password =$request->get('password');
-            $Doctor->adminstration =$request->get('adminstration');
+            $Doctor->adminstrationid =$request->get('adminstrationid');
             $Doctor->save();
         }
         // ROUTINGGGGGGGGGG
@@ -96,13 +96,12 @@ class MeetingInitiatorController extends doctorController
     ///////////////////////////////////     CLASS DIAGRAM Initiator FUNCTIONALITYYY
 
     public function createMeeting(Request $request){
-        $Initiatorid = $request->get('initiatorid');
+//        $Initiatorid = $request->get('initiatorid');
         $MC= new meetingController();
-        $last =$MC->getlastofInitiator($Initiatorid);
-        $MC->updatePrev($Initiatorid);
-        $MC->updatelastofInitiator($Initiatorid);
+//        $last =$MC->getlastofInitiator($Initiatorid);
+//        $MC->updatePrev($Initiatorid);
+//        $MC->updatelastofInitiator($Initiatorid);
         $MC->store($request);
-        return $last;
     }
 
     public function deleteMeeting($id){
@@ -156,10 +155,10 @@ class MeetingInitiatorController extends doctorController
         $GC= new GroupController();
         $data= $GC->searchbyinitiator($initiatorid);
         $Invitation= new InvitationNotificationsController();
-        $initiatorAdminstration = User::select('adminstration')->find($initiatorid);
+        $initiatorAdminstration = User::select('adminstrationid')->find($initiatorid);
         foreach ($data as $id){
             $request = new Request();
-            $doctorAdminstration= User::select('adminstration')->find($id['id']);
+            $doctorAdminstration= User::select('adminstrationid')->find($id['id']);
             $fromOutside=1;
             if($initiatorAdminstration == $doctorAdminstration){
                 $fromOutside= 0;
@@ -174,7 +173,7 @@ class MeetingInitiatorController extends doctorController
 
     public function RequestDoctor(Request $request,$initiatorid){
         $Invitation= new InvitationNotificationsController();
-        $initiatorAdminstration = User::select('adminstration')->find($initiatorid);
+        $initiatorAdminstration = User::select('adminstrationid')->find($initiatorid);
         $data = $request->all();
 
 
@@ -183,7 +182,7 @@ class MeetingInitiatorController extends doctorController
             foreach ($data as $key => $value) {
                 $newrequest = new Request();
                 $fromOutside=1;
-                $doctorAdminstration= User::select('adminstration')->find($value['doctorid']);
+                $doctorAdminstration= User::select('adminstrationid')->find($value['doctorid']);
                 if($initiatorAdminstration == $doctorAdminstration){
                     $fromOutside= 0;
                 }
