@@ -34,30 +34,33 @@
     <section class="fade-in">
 
         <h1>نسيت الكلمة المرور</h1>
-
-        <form id="forgetpasswordForm" style="position: relative;" class="needs-validation" novalidate>
-            @csrf
-
+        <div class="card-body">
             @if (session('status'))
                 <div class="alert alert-success" role="alert">
                     {{ session('status') }}
                 </div>
             @endif
-            <input id="email" placeholder="أدخل بريدك الألكتروني" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-            @error('email')
-            <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-            @enderror
+            <form method="POST" action{{ route('password.email') }}="">
+                @csrf
 
-            <div class="invalid-feedback">
-            </div>
-            <button type="submit">إرسال
-            </button>
-            <br>
-            <a href="login.html" style="text-decoration: none; color: white; width: 100%;"><button type="button">رجوع</button></a>
 
-        </form>
+                <input id="email" placeholder="أدخل بريدك الألكتروني" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                @error('email')
+                <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                @enderror
+                
+
+                <div class="invalid-feedback">
+                </div>
+                <button type="submit">إرسال
+                </button>
+                <br>
+                <a href="login.html" style="text-decoration: none; color: white; width: 100%;"><button type="button">رجوع</button></a>
+
+            </form>
+        </div>
         <!--<a href="index.html" class="loginLink"><span><strong>Go Home</strong></span></a> -->
     </section>
 </div>

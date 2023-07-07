@@ -262,7 +262,7 @@ Route:: middleware('auth:sanctum')->group(function (){
     Route::post('logout',[UserController::class,'logout']);
 
 });
-//Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('/forgotpassword', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 ////Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 ////Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
