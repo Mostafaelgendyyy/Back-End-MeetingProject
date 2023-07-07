@@ -248,7 +248,7 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
     "name":"mohamedNour",
     "email":"mohNour@gmail.com",
     "password":"123456789",
-    "adminstration":"نظم المعلومات"
+"adminstration":"نظم المعلومات"
 }
  *
  *

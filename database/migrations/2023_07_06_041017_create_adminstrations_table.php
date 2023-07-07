@@ -14,7 +14,7 @@ class CreateAdminstrationsTable extends Migration
     public function up()
     {
         Schema::create('adminstrations', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('name');
             $table->timestamps();
 
