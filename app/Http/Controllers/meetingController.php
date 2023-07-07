@@ -138,15 +138,6 @@ class meetingController extends Controller
         return $filter;
     }
 
-    public function getUpcomingMeetingsforcontroller($id){
-        $NowDT = Carbon::now()->toDateString();
-        $initiatordept = User::select('adminstrationid')->find($id);
-        return meeting::where([
-            ['date', '>', $NowDT],
-            [User::select('adminstrationid')->find($id),$initiatordept['adminstrationid']]
-        ])->get();
-    }
-
     public function getPrevious($id){
         return meeting::where([
             ['initiatorid',$id],
@@ -286,5 +277,82 @@ class meetingController extends Controller
                 'invitedData'=>$invitedData
             ];
         }
+    }
+
+
+    public function getUpcomingMeetingsforcontroller($controllerid){
+        $NowDT = Carbon::now()->toDateString();
+        $controllerdept = User::select('adminstrationid')->find($controllerid);
+        $UpcomingMeetings = meeting::select('meetingid','initiatorid')->where([
+            ['date', '>', $NowDT]
+            //[User::select('adminstrationid')->find($controllerid),$initiatordept['adminstrationid']]
+        ])->get();
+        $UpcomingMeetingsSatisfied= array();
+        foreach($UpcomingMeetings as $key=>$value)
+        {
+            $initiatordept=User::select('adminstrationid')->find($value['initiatorid']);
+            if($controllerdept['adminstrationid'] == $initiatordept['adminstrationid'])
+            {
+
+                array_push($UpcomingMeetingsSatisfied,$value['meetingid']);
+
+            }
+        }
+        return meeting::whereIn('meetingid',$UpcomingMeetingsSatisfied)->get();
+    }
+
+    public function getUpcomingMeetingsforDoctor($doctorid){
+        $NowDT = Carbon::now()->toDateString();
+        $Invitation = InvitationNotifications::where('doctorid',$doctorid)->get();
+        $UpcomingID=0;
+        $mindate='50000-08-06';
+        foreach ($Invitation as $k => $v)
+        {
+            $meetings=meeting::find($v['meetingid']);
+            if($NowDT < $meetings['date']){
+
+
+                if($meetings['date']<$mindate )
+                {
+
+                    $mindate=$meetings['date'];
+                    $UpcomingID=$meetings['meetingid'];
+                }
+            }
+        }
+        $meeting = meeting::find($UpcomingID);
+        return $meeting;
+    }
+
+//    public function getUpcomingMeetings($id){
+//        $NowDT = Carbon::now()->toDateString();
+//        $initiatordept = User::select('adminstrationid')->find($id);
+//        return meeting::where([
+//            ['date', '>', $NowDT],
+//            [User::select('adminstrationid')->find($id),$initiatordept['adminstrationid']]
+//        ])->get();
+//    }
+
+    public function getUpcomingMeetingsforInitiator($initiatorid){
+        $NowDT = Carbon::now()->toDateString();
+        $meetingofInitiator = meeting::where([
+            ['date', '>', $NowDT],
+            ['initiatorid',$initiatorid]
+        ])->get();
+        $UpcomingID=0;
+        $mindate='50000-08-06';
+
+        foreach ($meetingofInitiator as $k => $v)
+        {
+
+            if($v['date']<$mindate)
+            {
+
+                $mindate=$v['date'];
+                $UpcomingID=$v['meetingid'];
+            }
+        }
+        $meeting = meeting::find($UpcomingID);
+        return $meeting;
     }
 }

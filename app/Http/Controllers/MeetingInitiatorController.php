@@ -238,6 +238,14 @@ class MeetingInitiatorController extends doctorController
 
     }
 
+    public function deleteGroup($initiatorid){
+        $GID= group::where('initiatorid',$initiatorid)->get();
+        group::where('initiatorid',$initiatorid)->delete();
+        foreach ($GID as $key => $value)
+        {
+            groupuser::where('groupid',$value['id'])->delete();
+        }
+    }
 }
 
 /*

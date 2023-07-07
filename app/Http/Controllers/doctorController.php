@@ -54,7 +54,7 @@ class doctorController extends Controller
 //                'adminstration' =>'required',
 //            ]);
         $Doctor = new User([
-            'adminstration' =>$request->get('adminstration'),
+            'adminstrationid' =>$request->get('adminstrationid'),
             'email' =>$request->get('email'),
             'password' =>$request->get('password'),
             'role' =>'2',
@@ -165,21 +165,16 @@ class doctorController extends Controller
         $meetings= InvitationNotifications::select('meetingid')->where('doctorid',$id)->get();
         $meetingsData= meeting::find($meetings);
 
-        $initiatorsIDs= meeting::select('initiatorid')->find($meetings);
-        $initiators= User::find($initiatorsIDs);
+        foreach($meetingsData as $key=>$value)
+        {
+            $meetingInitiator = User::find($value['initiatorid']);
 
-        $Returned = [];
-        for($i = 0; $i < count($meetingsData); $i++) {
             $Returned[] = [
-                'meeing' => $meetingsData[$i],
-                'initiator' => $initiators[$i]
+                'meeing' => $value,
+                'initiator' => $meetingInitiator
             ];
+
         }
-//        return [
-//            "Meetings" => $meetingsData,
-//            "Initiators"=> $initiators
-//        ];
         return $Returned;
     }
-
 }

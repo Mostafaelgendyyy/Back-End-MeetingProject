@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\group;
 use App\Models\groupuser;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class GroupUserController extends Controller
@@ -105,4 +107,22 @@ class GroupUserController extends Controller
         }
 
     }
+
+    public function RetreiveGroupUsers($initiatorid)
+    {
+        $GID= group::where('initiatorid',$initiatorid)->get();
+        $GUsers=array();
+        foreach ($GID as $key => $value)
+        {
+            $GUsersIDS= groupuser::select('doctorid')->where('groupid',$value['id'])->get();
+
+            foreach($GUsersIDS as $k => $v)
+            {
+                array_push($GUsers,User::find($v['doctorid']));
+            }
+        }
+        return $GUsers;
+    }
+
+
 }
