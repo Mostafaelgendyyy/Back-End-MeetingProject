@@ -19,7 +19,6 @@ class CreateMeetingsTable extends Migration
             $table->foreign('initiatorid')->references('id')->on('users')->onDelete('cascade');
             $table->string('location');
             $table->date('date');
-            $table->string('topic');
             $table->tinyInteger('islast'); # ---> 0 no , 1 yes
             $table->string('meetingtype');
             $table->time('startedtime')->default('00:00:00');

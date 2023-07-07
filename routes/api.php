@@ -121,7 +121,7 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
     Route::get('/notifications/{id}',[doctorController::class,'getNotification']);
 
 });
-
+Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
 /********************** Meeting initiator ******************/
 Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);

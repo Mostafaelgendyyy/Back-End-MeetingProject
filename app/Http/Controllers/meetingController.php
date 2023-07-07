@@ -56,6 +56,7 @@ class meetingController extends Controller
             'location'=> $request->get('location'),
             'date'=> $request->get('date'),
             'topic'=> $request->get('topic'),
+            'meetingtype'=> $request->get('meetingtype'),
             'islast'=>'1'
         ]);
         $Meeting->save();
@@ -107,7 +108,7 @@ class meetingController extends Controller
         $Meeting->initiatorid = $request->get('initiatorid');
         $Meeting->location = $request->get('location');
         $Meeting->date = $request->get('date');
-        $Meeting->topic = $request->get('topic');
+        $Meeting->meetingtype = $request->get('meetingtype');
         $Meeting->save();
     }
 
