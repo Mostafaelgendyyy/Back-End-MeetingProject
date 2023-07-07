@@ -101,7 +101,7 @@ class UserController extends Controller
         {
             return response([
                 'error'=>['email or password is not matched']
-            ]);
+            ],401);
         }
 
         $token = $user->createToken('browser')->plainTextToken;

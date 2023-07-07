@@ -47,6 +47,8 @@ class subjectController extends Controller
 //            'iscompleted'=> 'required',
 //            'from'=> 'required'
 //        ]);
+
+
     public function store(Request $request)
     {
         $creatorrole = User::select('role')->find($request->get('userid'));

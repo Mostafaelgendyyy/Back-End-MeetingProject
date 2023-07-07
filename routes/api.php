@@ -168,7 +168,6 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
 
 });
-//-->Route::post('end-meeting',[meetingController::class,'FinalizeMeeting']);
 
 Route::get('currentMeeting/{id}',[meetingController::class,'RetreivedataforLast']);
 
