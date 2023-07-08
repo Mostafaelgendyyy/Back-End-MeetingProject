@@ -13,8 +13,8 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-//id="forgetpasswordForm" style="position: relative;" class="needs-validation" novalidate method="POST"
-                            <form method="POST" action{{ route('password.email') }}="">
+                        //id="forgetpasswordForm" style="position: relative;" class="needs-validation" novalidate method="POST"
+                        <form method="POST" action{{ route('password.email') }}="">
                             @csrf
 
                             <div class="row mb-3">

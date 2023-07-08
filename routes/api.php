@@ -34,6 +34,7 @@ Route::middleware('Auth:api')->get('/user', function (Request $request) {
 
 /****************** ADMIN *****************/
 
+Route::post('/adddoctor',[adminController::class,'addDoctor']);
 
 Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[App\Http\Controllers\adminController::class, 'index']);
@@ -262,8 +263,8 @@ Route:: middleware('auth:sanctum')->group(function (){
     Route::post('logout',[UserController::class,'logout']);
 
 });
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/forgotpassword', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+//Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+//Route::post('/forgotpassword', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 ////Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 ////Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
