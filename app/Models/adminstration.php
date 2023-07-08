@@ -9,6 +9,6 @@ class adminstration extends Model
 {
     use HasFactory;
     protected $fillable = ['id','name'];
-    protected $primaryKey = 'id';
+
     public $timestamps = false;
 }
