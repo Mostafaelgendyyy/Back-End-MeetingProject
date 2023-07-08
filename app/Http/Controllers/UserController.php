@@ -134,4 +134,21 @@ class UserController extends Controller
         }
     }
 
+    public function getDoctorsandInitiator()
+    {
+        $Satisfied = User::whereIn('role',[2,3])->get();
+        return $Satisfied;
+    }
+
+    public function searchbyname($name){
+//        $users = User::where([
+//            ['name', 'LIKE', '%'.$name.'%'],
+//            ['role',[3,2]]
+//        ])->get();
+
+        $Satisfied = User::whereIn('role',[2,3])->where('name', 'LIKE', '%'.$name.'%')->get();
+        return $Satisfied;
+
+    }
+
 }

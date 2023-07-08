@@ -49,7 +49,7 @@ class subjectControllerController extends Controller
 //                'adminstration' =>'required',
 //            ]);
         $subjectController= new User([
-            'adminstration' =>$request->get('adminstration'),
+            'adminstrationid' =>$request->get('adminstrationid'),
             'email' =>$request->get('email'),
             'password' =>$request->get('password'),
             'role' =>'0',
@@ -131,7 +131,7 @@ class subjectControllerController extends Controller
 
     public function SearchSubject(String $desc){
         $SC= new subjectController();
-        $SC->showByDesc($desc);
+        return $SC->showByDesc($desc);
     }
 
 

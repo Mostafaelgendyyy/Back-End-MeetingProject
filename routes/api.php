@@ -34,8 +34,6 @@ Route::middleware('Auth:api')->get('/user', function (Request $request) {
 
 /****************** ADMIN *****************/
 
-Route::post('/adddoctor',[adminController::class,'addDoctor']);
-
 Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[App\Http\Controllers\adminController::class, 'index']);
 
@@ -93,6 +91,7 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 
     Route::delete('deleteInvited/{id}',[InvitedController::class,'destroy']);
 
+
 });
 
 
@@ -110,7 +109,6 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
     Route::post('votereject-meeting',[containerSubjectController::class,'voteReject']);
 
     Route::get('/subjects/{containerID}',[containerSubjectController::class,'getSubjectsofContainer']);
-
 
     Route::get('/notifications/{id}',[doctorController::class,'getNotification']);
 
@@ -167,8 +165,14 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::get('upcoming/{initiatorid}',[meetingController::class,'getUpcomingMeetingsforInitiator']);
 
+    Route::get('search/{desc}',[subjectControllerController::class,'SearchSubject']);
+
+    Route::get('DoctorsandInitiator',[UserController::class,'getDoctorsandInitiator']);
+
+    Route::get('searchusers/{name}',[UserController::class,'searchbyname']);
 
 });
+
 
 
 /****************** Subject Controller *****************/
