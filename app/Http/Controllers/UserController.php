@@ -134,9 +134,9 @@ class UserController extends Controller
         }
     }
 
-    public function getDoctorsandInitiator()
+    public function getDoctorsandInitiator($initiatorid)
     {
-        $Satisfied = User::whereIn('role',[2,3])->get();
+        $Satisfied = User::whereIn('role',[2,3])->where('id','!=',$initiatorid)->get();
         return $Satisfied;
     }
 

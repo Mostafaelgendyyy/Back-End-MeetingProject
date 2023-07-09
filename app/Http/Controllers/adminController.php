@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\doctor;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\admin;
 class adminController extends Controller
 {
     public function __construct()
@@ -82,7 +80,7 @@ class adminController extends Controller
         // Find certain admin with certain email
         $Admin = User::where('email',$email)->get();
         return $Admin;
-//        dd($Admin);
+//
     }
     public function showbyUsername($username)
     {

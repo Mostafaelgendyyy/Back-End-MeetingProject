@@ -102,6 +102,7 @@ class MeetingInitiatorController extends doctorController
 //        $MC->updatePrev($Initiatorid);
 //        $MC->updatelastofInitiator($Initiatorid);
         $MC->store($request);
+        return $MC->getlast($request->get('initiatorid'));
     }
 
     public function deleteMeeting($id){
@@ -139,14 +140,18 @@ class MeetingInitiatorController extends doctorController
         $GC->store($request);
     }
 
-    public function adduserstogroup(Request $request){
+    public function adduserstogroup(Request $request,$initiatorid){
         $GC= new GroupUserController();
-
+        $GID = group::where('initiatorid',$initiatorid)->get();
+        $groupid = 0;
+        foreach($GID as $k => $v){
+            $groupid=$v['id'];
+        }
         $data = $request->all();
 
         foreach ($data as $key => $value) {
             $newRequest= new Request();
-            $newRequest->merge(['name'=>$value['name'],'email'=>$value['email'],'jobdescription'=>$value['jobdescription']]);
+            $newRequest->merge(['doctorid'=>strval($value['doctorid']),'groupid'=>strval($groupid)]);
             $GC->store($newRequest);
         }
     }

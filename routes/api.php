@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\GroupUserController;
-use App\Http\Controllers\InvitationNotificationsController;
 use App\Http\Controllers\InvitedController;
 use App\Http\Controllers\meetingController;
 use App\Http\Controllers\PlaceController;
@@ -116,6 +115,7 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
 
 
 });
+Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
 
 /********************** Meeting initiator ******************/
 Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
@@ -129,7 +129,7 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::post('CreateGroup',[MeetingInitiatorController::class,'makegroup']);
 
-    Route::post('addGroupUsers',[MeetingInitiatorController::class,'adduserstogroup']);
+    Route::post('addGroupUsers/{initiatorid}',[MeetingInitiatorController::class,'adduserstogroup']);
 
     Route::get('GroupUser/{id}',[GroupUserController::class,'RetreiveGroupUsers']);
 
@@ -167,13 +167,15 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::get('search/{desc}',[subjectControllerController::class,'SearchSubject']);
 
-    Route::get('DoctorsandInitiator',[UserController::class,'getDoctorsandInitiator']);
+    Route::get('DoctorsandInitiator/{initiatorid}',[UserController::class,'getDoctorsandInitiator']);
 
     Route::get('searchusers/{name}',[UserController::class,'searchbyname']);
 
+    Route::get('SubjectForMeetings/{meetingid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getSubjectsofMeeting']);
+
 });
 
-
+Route::get('MeetingOfSubjects/{subjectid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getMeetings']);
 
 /****************** Subject Controller *****************/
 
@@ -268,7 +270,7 @@ Route:: middleware('auth:sanctum')->group(function (){
 
 });
 //Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-//Route::post('/forgotpassword', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('/forgotpassword', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 ////Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 ////Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 

@@ -104,8 +104,19 @@ class MeetingSubjectsController extends Controller
 
     public function getSubjectsofMeeting($meetingid){
         $subjectsIDS = MeetingSubjects::select('subjectid')->where('meetingid',$meetingid)->get();
+        $subjects= array();
+        foreach ($subjectsIDS as $key => $value){
+            array_push($subjects,subject::find($value['subjectid']));
+        }
+        return $subjects;
+    }
 
-        $subjectsData= subject::find($subjectsIDS);
-        return $subjectsData;
+    public function getMeetings($subjectid){
+        $meetingid = MeetingSubjects::select('meetingid')->where('subjectid',$subjectid)->get();
+        $meetings= array();
+        foreach ($meetingid as $key => $value){
+            array_push($subjects,subject::find($value['meetingid']));
+        }
+        return $meetings;
     }
 }

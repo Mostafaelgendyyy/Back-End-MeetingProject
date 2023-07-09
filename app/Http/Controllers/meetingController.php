@@ -40,6 +40,10 @@ class meetingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function getlast($initiatorid)
+    {
+        return meeting::where('initiatorid',$initiatorid)->get()->last();
+    }
     public function store(Request $request)
     {
         //
@@ -224,6 +228,8 @@ class meetingController extends Controller
 
         foreach($last as $key=>$value)
         {
+            $initiatorData = User::find($initiatorid);
+            $MeetingData = meeting::find($value['meetingid']);
             $subjects = MeetingSubjects::where('meetingid',$value['meetingid'])->get();
             $subjectData=array();
             foreach($subjects as $k =>$v)
@@ -267,6 +273,8 @@ class meetingController extends Controller
                 array_push($invitedData, Invited::find($v['invitedid']));
             }
             return [
+                'meetingdata'=>$MeetingData,
+                'initatordata'=>$initiatorData,
                 'subjects'=>$subjects,
                 'subjectsData'=>$subjectData,
                 'attendee'=>$attendee,
@@ -356,3 +364,4 @@ class meetingController extends Controller
         return $meeting;
     }
 }
+
