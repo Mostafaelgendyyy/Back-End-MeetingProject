@@ -241,7 +241,7 @@ Route::post('addattendee',[MeetingInitiatorController::class,'addAttendee']);
 //Route::post('create-subject',[subjectController::class,'store']);
 
 
-//
+
 //Route::post('redirect/{id}',[subjectController::class,'redirectSubject']);
 //
 //Route::get('subjects/{dept}',[subjectController::class,'getSubjectsforController']);
