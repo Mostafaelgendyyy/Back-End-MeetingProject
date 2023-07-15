@@ -20,6 +20,7 @@ class CreateInvitationNotificationsTable extends Migration
             $table->unsignedBigInteger('meetingid');
             $table->foreign('meetingid')->references('meetingid')->on('meetings')->onDelete('cascade');
             $table->boolean('status')->nullable();
+            $table->boolean('accepted')->nullable();
             $table->boolean('fromoutside');
         });
     }

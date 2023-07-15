@@ -177,4 +177,14 @@ class doctorController extends Controller
         }
         return $Returned;
     }
+    public function subjectsOfMeetingForDoctors(Request $request){
+        $INC= new InvitationNotificationsController();
+        $returned = $INC->search($request);
+        if (sizeof($returned)==1)
+        {
+            $MSC= new MeetingSubjectsController();
+            foreach ($returned as $key=>$value)
+            return $MSC->getSubjectsofMeeting($value['meetingid']);
+        }
+    }
 }

@@ -20,7 +20,8 @@ class CreateMeetingsTable extends Migration
             $table->string('location');
             $table->date('date');
             $table->tinyInteger('islast'); # ---> 0 no , 1 yes
-            $table->string('meetingtype');
+            $table->unsignedBigInteger('meetingtypeid');
+            $table->foreign('meetingtypeid')->references('id')->on('meetingtypes')->onDelete('cascade');
             $table->time('startedtime');
             $table->time('endedtime')->default('00:00:00')->nullable();
         });

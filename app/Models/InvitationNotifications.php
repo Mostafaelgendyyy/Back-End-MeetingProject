@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class InvitationNotifications extends Model
 {
     use HasFactory;
-    protected $fillable = ['doctorid','meetingid','status','fromoutside'];
+    protected $fillable = ['doctorid','meetingid','status','accepted','fromoutside'];
     public $timestamps = false;
 
 }

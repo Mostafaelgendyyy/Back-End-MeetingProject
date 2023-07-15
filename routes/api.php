@@ -31,10 +31,12 @@ Route::middleware('Auth:api')->get('/user', function (Request $request) {
 });
 
 
+
+
 /****************** ADMIN *****************/
 
 Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
-    Route::get('/Interface',[App\Http\Controllers\adminController::class, 'index']);
+    Route::get('/Interface',[adminController::class, 'index']);
 
     Route::get('/getAdmin/{adminid?}',[adminController::class,'show']);
 
@@ -90,6 +92,17 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 
     Route::delete('deleteInvited/{id}',[InvitedController::class,'destroy']);
 
+    Route::post('addMeetingtype',[\App\Http\Controllers\meetingTypeController::class,'store']);
+
+    Route::post('updateMeetingtype',[\App\Http\Controllers\meetingTypeController::class,'update']);
+
+    Route::delete('deleteMeetingtype/{id}',[\App\Http\Controllers\meetingTypeController::class,'destroy']);
+
+    Route::post('addSubjecttype',[\App\Http\Controllers\subjectTypeController::class,'store']);
+
+    Route::post('updateSubjecttype',[\App\Http\Controllers\subjectTypeController::class,'update']);
+
+    Route::delete('deleteSubjecttype',[\App\Http\Controllers\subjectTypeController::class,'destroy']);
 
 });
 
@@ -113,11 +126,17 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
 
     Route::get('upcomingMeeting/{id}',[meetingController::class,'getUpcomingMeetingsforDoctor']);
 
+    Route::post('acceptRequest',[\App\Http\Controllers\InvitationNotificationsController::class,'acceptRequest']);
+
+    Route::post('rejectRequest',[\App\Http\Controllers\InvitationNotificationsController::class,'rejectRequest']);
+
+    Route::post('SubjectForMeetings',[doctorController::class,'subjectsOfMeetingForDoctors']); // FOR DOCTOR
 
 });
-Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
+
 
 /********************** Meeting initiator ******************/
+
 Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
 
@@ -173,9 +192,13 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::get('SubjectForMeetings/{meetingid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getSubjectsofMeeting']);
 
+    Route::get('doctorsinvited/{meetingid}',[\App\Http\Controllers\InvitationNotificationsController::class,'getDoctorsInvited']);
+
+    Route::get('MeetingOfSubjects/{subjectid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getMeetings']);
+
 });
 
-Route::get('MeetingOfSubjects/{subjectid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getMeetings']);
+//Route::get('MeetingOfSubjects/{subjectid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getMeetings']);
 
 /****************** Subject Controller *****************/
 
@@ -204,7 +227,15 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
     Route::get('upcomings/{id}',[meetingController::class,'getUpcomingMeetingsforcontroller']);
 
 });
+/**
+ *
+ * NEW API
+ *
+ */
+Route::post('addabsent',[MeetingInitiatorController::class,'addAbsent']);
+Route::post('addattendee',[MeetingInitiatorController::class,'addAttendee']);
 
+//for initiatoooor
 //Route::get('/attachment/{id}',[subjectController::class,'getAttachments']);
 //
 //Route::post('create-subject',[subjectController::class,'store']);
@@ -237,30 +268,6 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
 
 //---->Route::post('/password/reset/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class,'reset']);
 
-/*
- *
- *
- *
-    {
-
-        "initiatorid": 2,
-        "location": "Dokki",
-        "date": "2023-06-01",
-        "topic": "magls gam3a",
-        "id":[1,2,3,4,5] --> REquested doctors
-
-
-    }
-{
-    "name":"mohamedNour",
-    "email":"mohNour@gmail.com",
-    "password":"123456789",
-"adminstration":"نظم المعلومات"
-}
- *
- *
- *
- */
 
 Route::post('login',[UserController::class,'login']);
 

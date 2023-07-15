@@ -59,7 +59,7 @@ class meetingController extends Controller
             'initiatorid' => $request->get('initiatorid'),
             'location'=> $request->get('location'),
             'date'=> $request->get('date'),
-            'meetingtype'=> $request->get('meetingtype'),
+            'meetingtypeid'=> $request->get('meetingtypeid'),
             'islast'=>'1',
             'startedtime'=>$request->get('startedtime')
         ]);
@@ -112,7 +112,7 @@ class meetingController extends Controller
         $Meeting->initiatorid = $request->get('initiatorid');
         $Meeting->location = $request->get('location');
         $Meeting->date = $request->get('date');
-        $Meeting->meetingtype = $request->get('meetingtype');
+        $Meeting->meetingtypeid = $request->get('meetingtypeid');
         $Meeting->save();
     }
 
@@ -250,8 +250,20 @@ class meetingController extends Controller
                 ['meetingid',$value['meetingid']],
                 ['status',0]
             ])->get();
+
+
             $absenceData=array();
             foreach($absence as $k =>$v)
+            {
+                array_push($absenceData, User::find($v['doctorid']));
+            }
+
+            $rejected= InvitationNotifications::where([
+                ['meetingid',$value['meetingid']],
+                ['accept',0]
+            ])->get();
+
+            foreach($rejected as $k =>$v)
             {
                 array_push($absenceData, User::find($v['doctorid']));
             }

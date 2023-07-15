@@ -18,7 +18,8 @@ class CreateSubjectsTable extends Migration
             $table->unsignedBigInteger('userid')->nullable();
             $table->foreign('userid')->references('id')->on('users')->onDelete('cascade');
             $table->string('description');
-            $table->string('subjecttype');
+            $table->unsignedBigInteger('subjecttypeid');
+            $table->foreign('subjecttypeid')->references('id')->on('subjecttypes')->onDelete('cascade');
             $table->boolean('isCompleted');
             $table->string('attachmentlink')->nullable();
             $table->timestamps();

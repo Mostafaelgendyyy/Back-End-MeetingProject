@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\InvitationNotifications;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class InvitationNotificationsController extends Controller
@@ -138,5 +139,48 @@ class InvitationNotificationsController extends Controller
 
     public function findlastfordoctor($id){
         return InvitationNotifications::where('doctorid',$id)->select('meetingid')->get()->last();
+    }
+
+    public function acceptRequest(Request $request)
+    {
+        InvitationNotifications::where(
+            [
+                ['doctorid',$request->get('doctorid')],
+                ['meetingid',$request->get('meetingid')]
+            ])->update('accepted',1);
+    }
+
+    public function rejectRequest(Request $request)
+    {
+        InvitationNotifications::where(
+            [
+                ['doctorid',$request->get('doctorid')],
+                ['meetingid',$request->get('meetingid')]
+            ])->update('accepted',0);
+    }
+
+    public function search(Request $request){
+        return InvitationNotifications::where([
+            ['doctorid',$request->get('doctorid')],
+            ['meetingid',$request->get('meetingid')]
+        ])->get();
+    }
+
+    public function getDoctorsInvited($meetingid)
+    {
+        $DoctorIDS = InvitationNotifications::where(
+                'meetingid',$meetingid
+            )->select('doctorid')->get();
+
+        $doctorsData = array();
+
+        foreach($DoctorIDS as $k => $v)
+        {
+
+            array_push($doctorsData,User::find($v['doctorid']));
+        }
+
+
+        return $doctorsData;
     }
 }

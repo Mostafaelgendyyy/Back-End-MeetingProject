@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\containerSubjects;
 use App\Models\meeting;
 use App\Models\MeetingSubjects;
 use App\Models\subject;
@@ -61,7 +60,7 @@ class subjectController extends Controller
                 $subject= new subject([
                     'userid' => $request->get('userid'),
                     'description' => $request->get('description'),
-                    'subjecttype'=> $request->get('subjecttype'),
+                    'subjecttypeid'=> $request->get('subjecttypeid'),
                     'iscompleted' => 1,
                     'attachmentlink'=>$request->get('attachmentlink')
                 ]);
@@ -76,7 +75,7 @@ class subjectController extends Controller
                 $subject= new subject([
                     'userid' => $request->get('userid'),
                     'description' => $request->get('description'),
-                    'subjecttype'=> $request->get('subjecttype'),
+                    'subjecttypeid'=> $request->get('subjecttypeid'),
                     'iscompleted' => 0,
                     'attachmentlink'=>$request->get('attachmentlink')
                 ]);
@@ -87,7 +86,7 @@ class subjectController extends Controller
             $subject= new subject([
                 'userid' => $request->get('userid'),
                 'description' => $request->get('description'),
-                'subjecttype'=> $request->get('subjecttype'),
+                'subjecttypeid'=> $request->get('subjecttypeid'),
                 'iscompleted' => 0,
                 'attachmentlink'=>$request->get('attachmentlink')
             ]);
@@ -157,17 +156,18 @@ class subjectController extends Controller
     }
 
     public function getSubjects($controllerid){
-        $controllerAdminstration = User::select('adminstration')->find($controllerid);
+        $controllerAdminstration = User::select('adminstrationid')->find($controllerid);
 
         $subjects= subject::select('subjectid','userid')
             ->where('iscompleted',0)->get();
         $IDS = array();
+        //return $subjects;
+
         foreach ($subjects as $key=>$value){
-            $users= User::select('adminstration')->find($value['userid']);
+            $users= User::select('adminstrationid')->find($value['userid']);
 
             //return $controllerAdminstration ;
-
-            if ($users['adminstration'] == $controllerAdminstration['adminstration'])
+            if ($users['adminstrationid'] == $controllerAdminstration['adminstrationid'])
             {
                 array_push($IDS,$value['subjectid']);
             }
@@ -226,8 +226,6 @@ class subjectController extends Controller
         }
 
         return MeetingSubjects::whereIn('subjectid',$IDS)->get();
-
-
 
     }
 

@@ -9,7 +9,7 @@ class subject extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'subjectid','userid','description','subjecttype','iscompleted','attachmentlink'
+        'subjectid','userid','description','subjecttypeid','iscompleted','attachmentlink'
     ];
     public $timestamps = false;
 
