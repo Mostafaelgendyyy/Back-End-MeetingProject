@@ -2,8 +2,10 @@
 
 namespace App\Http;
 
+use Alkoumi\LaravelArabicNumbers\Http\Middleware\ConvertArabicDigitsToEnlishMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Alkoumi\LaravelArabicNumbers;
 class Kernel extends HttpKernel
 {
     /**
@@ -21,6 +23,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        ConvertArabicDigitsToEnlishMiddleware::class,
     ];
 
     /**
@@ -67,5 +70,6 @@ class Kernel extends HttpKernel
         'subjectController' => \App\Http\Middleware\subjectController::class,
         'doctor' => \App\Http\Middleware\doctor::class,
         'initiator' => \App\Http\Middleware\initiator::class,
+
     ];
 }

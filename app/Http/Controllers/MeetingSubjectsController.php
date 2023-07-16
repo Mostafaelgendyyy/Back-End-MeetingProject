@@ -102,6 +102,16 @@ class MeetingSubjectsController extends Controller
         $MS->delete();
     }
 
+    public function destroyByRequest(Request $request){
+        $subject = MeetingSubjects::where([
+            ['meetingid',$request->get('meetingid')],
+            ['subjectid',$request->get('subjectid')]
+        ])->get();
+        foreach ($subject as $key => $value){
+            $value->delete();
+        }
+    }
+
     public function getSubjectsofMeeting($meetingid){
         $subjectsIDS = MeetingSubjects::select('subjectid')->where('meetingid',$meetingid)->get();
         $subjects= array();
@@ -119,4 +129,5 @@ class MeetingSubjectsController extends Controller
         }
         return $meetings;
     }
+
 }

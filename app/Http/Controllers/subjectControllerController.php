@@ -139,9 +139,17 @@ class subjectControllerController extends Controller
     public function AddSubjecttoMeeting(Request $request){
         $CS= new MeetingSubjectsController();
         $data= $request->all();
+//        if(count($data)==1)
+//        {
+//            $CS->store($request);
+//        }
+//        else{
         foreach ($data as $Key=>$value){
-            $CS->store($value);
+            $newRequest= new Request();
+            $newRequest->merge(['meetingid' => $value['meetingid'], 'subjectid' => $value['subjectid'],'decision'=>$value['decision']]);
+            $CS->store($newRequest);
         }
+//        }
     }
 
     public function RemoveSubjectFromMeeting($id){

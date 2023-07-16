@@ -14,6 +14,7 @@ use App\Http\Controllers\subjectControllerController;
 use App\Http\Controllers\doctorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\containerSubjectController;
+use Alkoumi\LaravelArabicNumbers\Numbers;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,9 +104,28 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::post('updateSubjecttype',[\App\Http\Controllers\subjectTypeController::class,'update']);
 
     Route::delete('deleteSubjecttype',[\App\Http\Controllers\subjectTypeController::class,'destroy']);
+////////////////////////////////
+    Route::get('invited',[InvitedController::class,'viewall']);
+
+    Route::post('CreateGroup',[MeetingInitiatorController::class,'makegroup']);
+
+    Route::post('addGroupUsers/{initiatorid}',[MeetingInitiatorController::class,'adduserstogroup']);
+
+    Route::get('GroupUser/{id}',[GroupUserController::class,'RetreiveGroupUsers']);
+
+    Route::delete('deletegroup/{initiatorid}',[MeetingInitiatorController::class,'deleteGroup']);
+
+    Route::delete('deleted/{initiatorid}/{userid}', [MeetingInitiatorController::class,'deletefromGroup']);
+
+    Route::get('DoctorsandInitiator/{initiatorid}',[UserController::class,'getDoctorsandInitiator']);
+
+    Route::get('Subjecttype',[\App\Http\Controllers\subjectTypeController::class,'getAll']);
+
+    Route::get('Meetingtype',[\App\Http\Controllers\meetingTypeController::class,'getAll']);
 
 });
 
+Route::get('adminstrations',[\App\Http\Controllers\AdminstrationController::class,'getall']);
 
 /****************** Doctor *****************/
 
@@ -131,7 +151,10 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
     Route::post('rejectRequest',[\App\Http\Controllers\InvitationNotificationsController::class,'rejectRequest']);
 
     Route::post('SubjectForMeetings',[doctorController::class,'subjectsOfMeetingForDoctors']); // FOR DOCTOR
+////////////////////////////////
+    Route::get('Meetingtype/{id}',[\App\Http\Controllers\meetingTypeController::class,'show']);
 
+    Route::get('Subjecttype/{id}',[\App\Http\Controllers\subjectTypeController::class,'show']);
 });
 
 
@@ -195,10 +218,25 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
     Route::get('doctorsinvited/{meetingid}',[\App\Http\Controllers\InvitationNotificationsController::class,'getDoctorsInvited']);
 
     Route::get('MeetingOfSubjects/{subjectid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getMeetings']);
+////////////////////////////////
+    Route::get('Subjecttype',[\App\Http\Controllers\subjectTypeController::class,'getAll']);
+
+    Route::get('Meetingtype',[\App\Http\Controllers\meetingTypeController::class,'getAll']);
+
+    Route::get('Subjecttype/{id}',[\App\Http\Controllers\subjectTypeController::class,'show']);
+
+    Route::get('Meetingtype/{id}',[\App\Http\Controllers\meetingTypeController::class,'show']);
+
+    Route::get('User/{id}',[\App\Http\Controllers\UserController::class,'show']);
+
+    Route::post('acceptRequest',[\App\Http\Controllers\InvitationNotificationsController::class,'acceptRequest']);
+
+    Route::post('rejectRequest',[\App\Http\Controllers\InvitationNotificationsController::class,'rejectRequest']);
+
+    Route::get('places',[PlaceController::class,'getall']);
+
 
 });
-
-//Route::get('MeetingOfSubjects/{subjectid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getMeetings']);
 
 /****************** Subject Controller *****************/
 
@@ -210,7 +248,7 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
 
     Route::get('subjects-for-controller/{id}',[subjectControllerController::class,'getSubjects']);
 
-    Route::post('/addSubject-in-Meeting',[subjectControllerController::class,'AddSubjecttoMeeting']);
+    Route::post('/addSubject-in-Meeting',[subjectControllerController::class,'AddSubjecttoMeeting']); //takes List of Json
 
     Route::post('redirect/{id}',[subjectController::class,'redirectSubject']);
 
@@ -226,6 +264,15 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
 
     Route::get('upcomings/{id}',[meetingController::class,'getUpcomingMeetingsforcontroller']);
 
+    Route::delete('deletesubjectinMeeting',[\App\Http\Controllers\MeetingSubjectsController::class,'destroyByRequest']);
+////////////////////////////////
+    Route::get('Subjecttype',[\App\Http\Controllers\subjectTypeController::class,'getAll']);
+
+    Route::get('Subjecttype/{id}',[\App\Http\Controllers\subjectTypeController::class,'show']);
+
+    Route::get('SubjectForMeetings/{meetingid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getSubjectsofMeeting']);
+
+    Route::get('Meetingtype/{id}',[\App\Http\Controllers\meetingTypeController::class,'show']);
 });
 /**
  *
@@ -234,6 +281,8 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
  */
 Route::post('addabsent',[MeetingInitiatorController::class,'addAbsent']);
 Route::post('addattendee',[MeetingInitiatorController::class,'addAttendee']);
+
+
 
 //for initiatoooor
 //Route::get('/attachment/{id}',[subjectController::class,'getAttachments']);

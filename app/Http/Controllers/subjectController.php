@@ -164,10 +164,11 @@ class subjectController extends Controller
         //return $subjects;
 
         foreach ($subjects as $key=>$value){
+            $subjectinMeeting= MeetingSubjects::where('subjectid',$value['subjectid'])->get();
             $users= User::select('adminstrationid')->find($value['userid']);
 
             //return $controllerAdminstration ;
-            if ($users['adminstrationid'] == $controllerAdminstration['adminstrationid'])
+            if ($users['adminstrationid'] == $controllerAdminstration['adminstrationid'] && count($subjectinMeeting)==0)
             {
                 array_push($IDS,$value['subjectid']);
             }
