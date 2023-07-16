@@ -196,17 +196,17 @@ class subjectController extends Controller
 
     public function showArchive($initiatorid){
 
-        $intiatorAdminstration = User::select('adminstration')->find($initiatorid);
+        $intiatorAdminstration = User::select('adminstrationid')->find($initiatorid);
 
         $subjects= subject::select('subjectid','userid')
             ->where('iscompleted',1)->get();
         $IDS = array();
         foreach ($subjects as $key=>$value){
-            $users= User::select('adminstration')->find($value['userid']);
+            $users= User::select('adminstrationid')->find($value['userid']);
 
             //return $controllerAdminstration ;
 
-            if ($users['adminstration'] == $intiatorAdminstration['adminstration'])
+            if ($users['adminstrationid'] == $intiatorAdminstration['adminstrationid'])
             {
                 array_push($IDS,$value['subjectid']);
             }
