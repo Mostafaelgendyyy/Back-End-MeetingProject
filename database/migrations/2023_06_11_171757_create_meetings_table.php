@@ -17,7 +17,8 @@ class CreateMeetingsTable extends Migration
             $table->id('meetingid');
             $table->unsignedBigInteger('initiatorid');
             $table->foreign('initiatorid')->references('id')->on('users')->onDelete('cascade');
-            $table->string('location');
+            $table->unsignedBigInteger('placeid');
+            $table->foreign('placeid')->references('id')->on('places')->onDelete('cascade');
             $table->date('date');
             $table->tinyInteger('islast'); # ---> 0 no , 1 yes
             $table->unsignedBigInteger('meetingtypeid');

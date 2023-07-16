@@ -57,7 +57,7 @@ class meetingController extends Controller
 
         $Meeting = new meeting([
             'initiatorid' => $request->get('initiatorid'),
-            'location'=> $request->get('location'),
+            'placeid'=> $request->get('placeid'),
             'date'=> $request->get('date'),
             'meetingtypeid'=> $request->get('meetingtypeid'),
             'islast'=>'1',
@@ -110,7 +110,7 @@ class meetingController extends Controller
         $Meeting = meeting::find($id);
 
         $Meeting->initiatorid = $request->get('initiatorid');
-        $Meeting->location = $request->get('location');
+        $Meeting->placeid = $request->get('placeid');
         $Meeting->date = $request->get('date');
         $Meeting->meetingtypeid = $request->get('meetingtypeid');
         $Meeting->save();

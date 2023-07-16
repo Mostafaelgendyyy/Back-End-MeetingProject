@@ -86,7 +86,7 @@ class UserController extends Controller
     {
         $user= User::find($id);
         $user->role= $request->get('role');
-        $user->adminstration= $request->get('adminstration');
+        //$user->adminstration= $request->get('adminstration');
         $user->save();
         ////////////////////// RETURN TO ROUTING Page access DONE
     }
