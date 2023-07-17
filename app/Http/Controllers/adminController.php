@@ -49,9 +49,10 @@ class adminController extends Controller
         $admin= new User([
             'name' =>$request->get('name'),
             'email' =>$request->get('email'),
-            'password' =>$request->get('password'),
+            'password' =>bcrypt($request->get('password')),
             'adminstrationid' =>$request->get('adminstrationid'),
-            'role'=>'1'
+            'role'=>'1',
+            'jobdescription'=>$request->get('jobdescription')
         ]);
 
 

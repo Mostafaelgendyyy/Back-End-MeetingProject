@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\meeting;
 use App\Models\MeetingSubjects;
+use App\Models\meetingtype;
 use App\Models\subject;
+use App\Models\subjecttype;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -194,7 +196,77 @@ class subjectController extends Controller
     }
 
 
+
+
     public function showArchive($initiatorid){
+
+        $intiatorAdminstration = User::select('adminstrationid')->find($initiatorid);
+
+        $subjects= subject::where('iscompleted',1)->get();
+        $IDS = array();
+        foreach ($subjects as $key=>$value){
+            $users= User::select('adminstrationid')->find($value['userid']);
+
+            //return $controllerAdminstration ;
+
+            if ($users['adminstrationid'] == $intiatorAdminstration['adminstrationid'])
+            {
+                array_push($IDS,$value['subjectid']);
+            }
+
+        }
+        $maglskolyaID=0;
+        $maglskolya = meetingtype::where('name','LIKE', '%مجلس الكلية%')->get();
+        foreach($maglskolya as $key => $value){
+            $maglskolyaID = $value['id'];
+        }
+
+        $meetingIDs= meeting::select('meetingid')->where('meetingtypeid',$maglskolyaID)->get();
+        // عرض مواضيع القسم و مواضيع مجلس الكلية فقط
+
+
+        foreach($meetingIDs as $key=>$value){
+            $subjects= MeetingSubjects::where('meetingid',$value['meetingid'])->get();
+            foreach($subjects as $k =>$v)
+            {
+                array_push($IDS,$v['subjectid']);
+
+            }
+
+        }
+
+        //return MeetingSubjects::whereIn('subjectid',$IDS)->get();
+        $returnedList=array();
+
+        foreach($IDS as $id)
+        {
+            $subjectData= subject::find($id);
+            $subjecttypeid=subject::select('subjecttypeid')->find($id);
+            $subjecttypename= subjecttype::select('name')->find($subjecttypeid);
+            $meetingid = MeetingSubjects::where('subjectid',$id)->get();
+            foreach($meetingid as $k => $v){
+                $decision= $v['decision'];
+                $meetingdata = meeting::find($v['meetingid']);
+                $meetingtypeid=meeting::select('meetingtypeid')->find($v['meetingid']);
+                $meetingtypename= meetingtype::select('name')->find($meetingtypeid);
+                $list = [
+                    'subjectData'=>$subjectData,
+                    'subjecttype'=>$subjecttypename,
+                    'decision'=>$decision,
+                    'meetingdata'=>$meetingdata,
+                    'meetingtypename'=>$meetingtypename
+                ];
+                array_push($returnedList,$list);
+
+            }
+        }
+        return $returnedList;
+
+
+    }
+
+/*
+public function showArchive($initiatorid){
 
         $intiatorAdminstration = User::select('adminstrationid')->find($initiatorid);
 
@@ -229,6 +301,5 @@ class subjectController extends Controller
         return MeetingSubjects::whereIn('subjectid',$IDS)->get();
 
     }
-
-
+ */
 }

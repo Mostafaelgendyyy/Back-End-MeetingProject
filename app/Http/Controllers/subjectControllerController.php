@@ -51,9 +51,10 @@ class subjectControllerController extends Controller
         $subjectController= new User([
             'adminstrationid' =>$request->get('adminstrationid'),
             'email' =>$request->get('email'),
-            'password' =>$request->get('password'),
+            'password' =>bcrypt($request->get('password')),
             'role' =>'0',
-            'name' =>$request->get('name')]);
+            'name' =>$request->get('name'),
+            'jobdescription'=>$request->get('jobdescription')]);
         $subjectController->save(); # saving Data to Database
     }
 
@@ -146,7 +147,8 @@ class subjectControllerController extends Controller
 //        else{
         foreach ($data as $Key=>$value){
             $newRequest= new Request();
-            $newRequest->merge(['meetingid' => $value['meetingid'], 'subjectid' => $value['subjectid'],'decision'=>$value['decision']]);
+            $newRequest->merge(['meetingid' => $value['meetingid'], 'subjectid' => $value['subjectid']]);
+            subject::where('subjectid',$value['subjectid'])->update(['iscompleted'=>1]);
             $CS->store($newRequest);
         }
 //        }

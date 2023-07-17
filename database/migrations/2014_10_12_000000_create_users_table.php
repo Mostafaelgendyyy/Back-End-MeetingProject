@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->unsignedBigInteger('adminstrationid')->nullable();
             $table->foreign('adminstrationid')->references('id')->on('adminstrations')->onDelete('cascade');
+            $table->string('jobdescription');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -130,4 +130,6 @@ class MeetingSubjectsController extends Controller
         return $meetings;
     }
 
+//    public function takeDecision
+
 }

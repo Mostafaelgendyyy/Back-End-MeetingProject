@@ -56,9 +56,12 @@ class doctorController extends Controller
         $Doctor = new User([
             'adminstrationid' =>$request->get('adminstrationid'),
             'email' =>$request->get('email'),
-            'password' =>$request->get('password'),
+            'password' =>bcrypt($request->get('password')),
             'role' =>'2',
-            'name' =>$request->get('name')]);
+            'name' =>$request->get('name'),
+            'jobdescription'=>$request->get('jobdescription')
+            ]);
+
         $Doctor->save();
         ///////Return ROUTING SUCCESSSS
     }

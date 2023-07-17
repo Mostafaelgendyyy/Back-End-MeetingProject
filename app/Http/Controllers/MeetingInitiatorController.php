@@ -28,9 +28,10 @@ class MeetingInitiatorController extends doctorController
         $Doctor = new User([
             'adminstrationid' =>$request->get('adminstrationid'),
             'email' =>$request->get('email'),
-            'password' =>$request->get('password'),
+            'password' =>bcrypt($request->get('password')),
             'role' =>'3',
-            'name' =>$request->get('name')]);
+            'name' =>$request->get('name'),
+            'jobdescription'=>$request->get('jobdescription')]);
         $Doctor->save();
         ///////Return ROUTING SUCCESSSS
     }
@@ -181,8 +182,6 @@ class MeetingInitiatorController extends doctorController
         $Invitation= new InvitationNotificationsController();
         $initiatorAdminstration = User::select('adminstrationid')->find($initiatorid);
         $data = $request->all();
-
-
 
         foreach ($data as $key => $value) {
             $newrequest = new Request();

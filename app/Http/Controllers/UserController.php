@@ -34,8 +34,9 @@ class UserController extends Controller
         $user= new User([
             'name' =>$request->get('name'),
             'email' =>$request->get('email'),
-            'password' =>$request->get('password'),
+            'password' =>bcrypt($request->get('password')),
             'role' =>$request->get('role'),
+            'jobdescription' =>$request->get('jobdescription')
         ]);
         $user->save();
     }
@@ -66,6 +67,7 @@ class UserController extends Controller
         $user->name = $request->get('name');
         $user->email = $request->get('email');
         $user->password = $request->get('password');
+        $user->jobdescription=$request->get('jobdescription');
         $user->save();
     }
 
@@ -137,6 +139,14 @@ class UserController extends Controller
     public function getDoctorsandInitiator($initiatorid)
     {
         $Satisfied = User::whereIn('role',[2,3])->where('id','!=',$initiatorid)->get();
+        return $Satisfied;
+    }
+    public function getDoctorsandInitiatorbyAdminstration($initiatorid,$adminstrationid)
+    {
+        $Satisfied = User::whereIn('role',[2,3])->where([
+            ['id','!=',$initiatorid],
+            ['adminstrationid',$adminstrationid]
+        ])->get();
         return $Satisfied;
     }
 

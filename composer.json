@@ -17,7 +17,8 @@
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.4",
-        "paragonie/random_compat": "2.*"
+        "paragonie/random_compat": "2.*",
+        "thiagoalessio/tesseract_ocr": "^2.12"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
