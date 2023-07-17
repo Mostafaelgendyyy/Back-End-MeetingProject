@@ -37,7 +37,6 @@ class PlaceController extends Controller
     {
         //
         $place = new place([
-            'adminid'=> $request->get('adminid'),
             'placename'=> $request->get('placename')
         ]);
         $place->save();

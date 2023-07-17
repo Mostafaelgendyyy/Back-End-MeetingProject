@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class place extends Model
 {
     use HasFactory;
-    protected $fillable = ['adminid','placename'];
+    protected $fillable = ['placename'];
 
     public $timestamps = false;
 }

@@ -79,13 +79,13 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 
     Route::post('addPlace',[adminController::class,'addPlace']);
 
-    Route::get('deletePlace/{id}',[adminController::class,'deletePlace']);
+    Route::delete('deletePlace/{id}',[adminController::class,'deletePlace']);
 
     Route::get('places',[PlaceController::class,'getall']);
 
     Route::post('addAdminstration',[adminController::class,'addAdminstration']);
 
-    Route::get('deleteAdminstration/{id}',[adminController::class,'deleteAdminstration']);
+    Route::delete('deleteAdminstration/{id}',[adminController::class,'deleteAdminstration']);
 
     Route::post('addInvited',[InvitedController::class,'store']);
 
