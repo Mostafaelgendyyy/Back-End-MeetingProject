@@ -16,8 +16,6 @@ class CreatePlacesTable extends Migration
         Schema::create('places', function (Blueprint $table) {
             $table->id();
             $table->string('placename')->unique();
-            $table->unsignedBigInteger('adminid');
-            $table->foreign('adminid')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
