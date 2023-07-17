@@ -8,6 +8,7 @@ use App\Models\Invited;
 use App\Models\meeting;
 use App\Models\MeetingSubjects;
 use App\Models\subject;
+use App\Models\subjecttype;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -243,7 +244,12 @@ class meetingController extends Controller
             $subjectData=array();
             foreach($subjects as $k =>$v)
             {
-                array_push($subjectData, subject::find($v['subjectid']));
+                $subjectdata= subject::find($v['subjectid']);
+                $arr = [
+                    'subjectdata' => $subjectdata,
+                    'subjecttype' => subjecttype::select('name')->find($subjectdata['subjecttypeid'])
+                ];
+                array_push($subjectData,$arr);
             }
             $attendee= InvitationNotifications::where([
                 ['meetingid',$value['meetingid']],
@@ -258,6 +264,9 @@ class meetingController extends Controller
             $absence= InvitationNotifications::where([
                 ['meetingid',$value['meetingid']],
                 ['status',0]
+            ])->orwhere([
+                ['meetingid',$value['meetingid']],
+                ['accepted',0]
             ])->get();
 
 
@@ -267,15 +276,6 @@ class meetingController extends Controller
                 array_push($absenceData, User::find($v['doctorid']));
             }
 
-            $rejected= InvitationNotifications::where([
-                ['meetingid',$value['meetingid']],
-                ['accept',0]
-            ])->get();
-
-            foreach($rejected as $k =>$v)
-            {
-                array_push($absenceData, User::find($v['doctorid']));
-            }
             $InvitedUsers = InvitationNotifications::where([
                 ['meetingid',$value['meetingid']],
                 ['fromoutside',1]

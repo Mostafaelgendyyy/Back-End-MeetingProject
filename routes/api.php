@@ -132,6 +132,9 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 
     Route::get('adminstration/{id}',[\App\Http\Controllers\AdminstrationController::class,'show']);
 
+    Route::get('adminstrations',[\App\Http\Controllers\AdminstrationController::class,'getall']);
+
+    Route::get('DoctorsandInitiator/{initiatorid}',[UserController::class,'getDoctorsandInitiator']);
 });
 
 /****************** Doctor *****************/
@@ -168,7 +171,7 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
 
 /********************** Meeting initiator ******************/
 
-Route::get('Archived/{initiatorid}',[subjectController::class,'showArchive']);
+Route::get('InitPDFData/{initiatorid}',[meetingController::class,'DataPreviousforPDF']);
 
 Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
@@ -249,6 +252,8 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     ////////////////////////////////// list of DOCTORS
     Route::get('DoctorsandInitiators/{initiatorid}/{adminstrationid}',[UserController::class,'getDoctorsandInitiatorbyAdminstration']);
+
+    Route::get('adminstrations',[\App\Http\Controllers\AdminstrationController::class,'getall']);
 
 });
 
