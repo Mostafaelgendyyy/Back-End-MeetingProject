@@ -14,7 +14,6 @@ use App\Http\Controllers\subjectControllerController;
 use App\Http\Controllers\doctorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\containerSubjectController;
-use Alkoumi\LaravelArabicNumbers\Numbers;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +29,6 @@ use Alkoumi\LaravelArabicNumbers\Numbers;
 Route::middleware('Auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
 
 
 
@@ -105,6 +103,7 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 
     Route::delete('deleteSubjecttype',[\App\Http\Controllers\subjectTypeController::class,'destroy']);
 ////////////////////////////////
+
     Route::get('invited',[InvitedController::class,'viewall']);
 
     Route::post('CreateGroup',[MeetingInitiatorController::class,'makegroup']);
@@ -123,9 +122,10 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 
     Route::get('Meetingtype',[\App\Http\Controllers\meetingTypeController::class,'getAll']);
 
+    Route::get('adminstration/{id}',[\App\Http\Controllers\AdminstrationController::class,'show']);
+
 });
 
-Route::get('adminstrations',[\App\Http\Controllers\AdminstrationController::class,'getall']);
 
 /****************** Doctor *****************/
 
@@ -155,10 +155,12 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
     Route::get('Meetingtype/{id}',[\App\Http\Controllers\meetingTypeController::class,'show']);
 
     Route::get('Subjecttype/{id}',[\App\Http\Controllers\subjectTypeController::class,'show']);
+
+    Route::get('place/{id}',[PlaceController::class,'show']);
 });
 
-
 /********************** Meeting initiator ******************/
+
 
 Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
@@ -235,8 +237,10 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::get('places',[PlaceController::class,'getall']);
 
-
+    Route::get('place/{id}',[PlaceController::class,'show']);
 });
+
+
 
 /****************** Subject Controller *****************/
 
@@ -279,6 +283,9 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
  * NEW API
  *
  */
+
+Route::delete('deletesubjectinMeeting',[\App\Http\Controllers\MeetingSubjectsController::class,'destroyByRequest']);
+
 Route::post('addabsent',[MeetingInitiatorController::class,'addAbsent']);
 Route::post('addattendee',[MeetingInitiatorController::class,'addAttendee']);
 

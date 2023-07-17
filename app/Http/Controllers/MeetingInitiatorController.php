@@ -96,11 +96,11 @@ class MeetingInitiatorController extends doctorController
     ///////////////////////////////////     CLASS DIAGRAM Initiator FUNCTIONALITYYY
 
     public function createMeeting(Request $request){
-//        $Initiatorid = $request->get('initiatorid');
+        $Initiatorid = $request->get('initiatorid');
         $MC= new meetingController();
-//        $last =$MC->getlastofInitiator($Initiatorid);
-//        $MC->updatePrev($Initiatorid);
-//        $MC->updatelastofInitiator($Initiatorid);
+        $last =$MC->getlastofInitiator($Initiatorid);
+        $MC->updatePrev($Initiatorid);
+        $MC->updatelastofInitiator($Initiatorid);
         $MC->store($request);
         return $MC->getlast($request->get('initiatorid'));
     }
@@ -157,18 +157,19 @@ class MeetingInitiatorController extends doctorController
     }
 
     public function requestGroupforMeeting($initiatorid, $meetingid){
-        $GC= new GroupController();
-        $data= $GC->searchbyinitiator($initiatorid);
+        $GUC= new GroupUserController();
+        $groupUsersData =[];
+        $groupUsersData = $GUC->RetreiveGroupUsers($initiatorid);
         $Invitation= new InvitationNotificationsController();
         $initiatorAdminstration = User::select('adminstrationid')->find($initiatorid);
-        foreach ($data as $id){
+        foreach ($groupUsersData as $key=>$value){
             $request = new Request();
-            $doctorAdminstration= User::select('adminstrationid')->find($id['id']);
+            $doctorAdminstration= User::select('adminstrationid')->find($value['id']);
             $fromOutside=1;
             if($initiatorAdminstration == $doctorAdminstration){
                 $fromOutside= 0;
             }
-            $request->merge(['doctorid'=>strval($id['id']),'meetingid'=>$meetingid, 'fromoutside'=>strval($fromOutside)]);
+            $request->merge(['doctorid'=>strval($value['id']),'meetingid'=>$meetingid, 'fromoutside'=>strval($fromOutside)]);
 //            return $request;
             $Invitation->store($request);
         }
@@ -182,20 +183,19 @@ class MeetingInitiatorController extends doctorController
         $data = $request->all();
 
 
-        if(count($data)>1)
-        {
-            foreach ($data as $key => $value) {
-                $newrequest = new Request();
-                $fromOutside=1;
-                $doctorAdminstration= User::select('adminstrationid')->find($value['doctorid']);
-                if($initiatorAdminstration == $doctorAdminstration){
-                    $fromOutside= 0;
-                }
-                $newrequest->merge(['doctorid'=>strval($value['doctorid']),'meetingid'=>strval($value['meetingid']), 'fromoutside'=>strval($fromOutside)]);
-//                return $newrequest;
-                $Invitation->store($newrequest);
+
+        foreach ($data as $key => $value) {
+            $newrequest = new Request();
+            $fromOutside=1;
+            $doctorAdminstration= User::select('adminstrationid')->find($value['doctorid']);
+            if($initiatorAdminstration == $doctorAdminstration){
+                $fromOutside= 0;
             }
+            $newrequest->merge(['doctorid'=>strval($value['doctorid']),'meetingid'=>strval($value['meetingid']), 'fromoutside'=>strval($fromOutside)]);
+//                return $newrequest;
+            $Invitation->store($newrequest);
         }
+
 //        else if (count($data)==1){
 //            $doctorAdminstration='';
 //            $newrequest = new Request();

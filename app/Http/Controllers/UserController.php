@@ -93,7 +93,7 @@ class UserController extends Controller
 
     public function usersbyAdminstration($admintrationId)
     {
-        return $Users = User::where('adminstration',$admintrationId)->get();
+        return  User::where('adminstrationid',$admintrationId)->get();
     }
     public function login(Request $request){
         $user= User::where('email',$request->get('email'))->first();

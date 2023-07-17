@@ -47,7 +47,6 @@ class InvitationNotificationsController extends Controller
             'doctorid' => $request->get('doctorid'),
             'meetingid'=> $request->get('meetingid'),
             'fromoutside'=> $request->get('fromoutside')
-
         ]);
         $notification->save();
         $mailer= new MeetingMailController();
@@ -147,7 +146,7 @@ class InvitationNotificationsController extends Controller
             [
                 ['doctorid',$request->get('doctorid')],
                 ['meetingid',$request->get('meetingid')]
-            ])->update('accepted',1);
+            ])->update(['accepted'=>1]);
     }
 
     public function rejectRequest(Request $request)
@@ -156,7 +155,7 @@ class InvitationNotificationsController extends Controller
             [
                 ['doctorid',$request->get('doctorid')],
                 ['meetingid',$request->get('meetingid')]
-            ])->update('accepted',0);
+            ])->update(['accepted'=>0]);
     }
 
     public function search(Request $request){

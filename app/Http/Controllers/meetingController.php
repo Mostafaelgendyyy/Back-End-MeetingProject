@@ -11,6 +11,8 @@ use App\Models\subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Alkoumi\LaravelArabicNumbers\Numbers;
+use Nette\MemberAccessException;
 
 class meetingController extends Controller
 {
@@ -76,8 +78,9 @@ class meetingController extends Controller
     public function show($id)
     {
         //
-        return meeting::find($id);
-
+        $meeting = meeting::find($id);
+        $meeting['date']=Numbers::ShowInArabicDigits($meeting['date']);
+        return $meeting;
     }
 
     /**
@@ -178,14 +181,20 @@ class meetingController extends Controller
     }
 
     public function RetreivedataforLast($initiatorid){
-        $last = meeting::select('meetingid')->where([
+        $NowDT = Carbon::now()->toDateString();
+
+        $last = meeting::where([
             ['initiatorid',$initiatorid],
-            ['islast',1]
+            ['islast',1],
         ])->get();
         foreach($last as $key=>$value)
         {
-            $subjects = MeetingSubjects::where('meetingid',$value['meetingid'])->get();
-            return $subjects;
+            if($NowDT < $value['date'])
+            {
+                return $value;
+            }
+//            $subjects = MeetingSubjects::where('meetingid',$value['meetingid'])->get();
+//            return $subjects;
         }
     }
 
@@ -318,7 +327,14 @@ class meetingController extends Controller
 
             }
         }
-        return meeting::whereIn('meetingid',$UpcomingMeetingsSatisfied)->get();
+        $Arr_meetings = array();
+        $meetings = meeting::whereIn('meetingid',$UpcomingMeetingsSatisfied)->get();
+        foreach($meetings as $k =>$v)
+        {
+            $v['date']= Numbers::ShowInArabicDigits($v['date']);
+            array_push($Arr_meetings,$v);
+        }
+        return $Arr_meetings;
     }
 
     public function getUpcomingMeetingsforDoctor($doctorid){
@@ -340,7 +356,7 @@ class meetingController extends Controller
                 }
             }
         }
-        $meeting = meeting::find($UpcomingID);
+        $meeting = $this->show($UpcomingID);
         return $meeting;
     }
 
@@ -372,7 +388,7 @@ class meetingController extends Controller
                 $UpcomingID=$v['meetingid'];
             }
         }
-        $meeting = meeting::find($UpcomingID);
+        $meeting = $this->show($UpcomingID);
         return $meeting;
     }
 }
