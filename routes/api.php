@@ -116,7 +116,7 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 
     Route::delete('deleted/{initiatorid}/{userid}', [MeetingInitiatorController::class,'deletefromGroup']);
 
-    Route::get('DoctorsandInitiator/{initiatorid}',[UserController::class,'getDoctorsandInitiator']);
+//
 
     Route::get('Subjecttype',[\App\Http\Controllers\subjectTypeController::class,'getAll']);
 
@@ -125,7 +125,6 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::get('adminstration/{id}',[\App\Http\Controllers\AdminstrationController::class,'show']);
 
 });
-
 
 /****************** Doctor *****************/
 
@@ -238,6 +237,10 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
     Route::get('places',[PlaceController::class,'getall']);
 
     Route::get('place/{id}',[PlaceController::class,'show']);
+
+    ////////////////////////////////// list of DOCTORS
+    Route::get('DoctorsandInitiators/{initiatorid}/{adminstrationid}',[UserController::class,'getDoctorsandInitiatorbyAdminstration']);
+
 });
 
 
