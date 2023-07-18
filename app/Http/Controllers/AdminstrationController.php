@@ -37,7 +37,7 @@ class AdminstrationController extends Controller
     {
         //
         $adminstration = new adminstration([
-            'name'=>$request->get('name'),
+            'ar_name'=>$request->get('ar_name'),
             'eng_name'=>$request->get('eng_name')
         ]);
         $adminstration->save();
@@ -78,7 +78,7 @@ class AdminstrationController extends Controller
     {
         //
         $adminstration= adminstration::find($id);
-        $adminstration->name= $request->get('name');
+        $adminstration->ar_name= $request->get('ar_name');
         $adminstration->eng_name= $request->get('eng_name');
         $adminstration->save();
     }
