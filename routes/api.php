@@ -34,13 +34,6 @@ Route::middleware('Auth:api')->get('/user', function (Request $request) {
 
 
 /****************** ADMIN *****************/
-Route::post('/adddoctor',[adminController::class,'addDoctor']);
-
-Route::post('/addSubjectController',[adminController::class,'addSubjectController']);
-
-Route::post('/addInitiator',[adminController::class,'addInitiator']);
-
-Route::post('/addAdmin',[adminController::class,'addAdmin']);
 
 Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[adminController::class, 'index']);
@@ -110,7 +103,6 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::post('updateSubjecttype',[\App\Http\Controllers\subjectTypeController::class,'update']);
 
     Route::delete('deleteSubjecttype',[\App\Http\Controllers\subjectTypeController::class,'destroy']);
-////////////////////////////////
 
     Route::get('invited',[InvitedController::class,'viewall']);
 
@@ -123,8 +115,6 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::delete('deletegroup/{initiatorid}',[MeetingInitiatorController::class,'deleteGroup']);
 
     Route::delete('deleted/{initiatorid}/{userid}', [MeetingInitiatorController::class,'deletefromGroup']);
-
-//
 
     Route::get('Subjecttype',[\App\Http\Controllers\subjectTypeController::class,'getAll']);
 
@@ -229,7 +219,7 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
     Route::get('doctorsinvited/{meetingid}',[\App\Http\Controllers\InvitationNotificationsController::class,'getDoctorsInvited']);
 
     Route::get('MeetingOfSubjects/{subjectid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getMeetings']);
-////////////////////////////////
+
     Route::get('Subjecttype',[\App\Http\Controllers\subjectTypeController::class,'getAll']);
 
     Route::get('Meetingtype',[\App\Http\Controllers\meetingTypeController::class,'getAll']);
@@ -293,7 +283,7 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
     Route::get('upcomings/{id}',[meetingController::class,'getUpcomingMeetingsforcontroller']);
 
     Route::delete('deletesubjectinMeeting',[\App\Http\Controllers\MeetingSubjectsController::class,'destroyByRequest']);
-////////////////////////////////
+
     Route::get('Subjecttype',[\App\Http\Controllers\subjectTypeController::class,'getAll']);
 
     Route::get('Subjecttype/{id}',[\App\Http\Controllers\subjectTypeController::class,'show']);
@@ -302,48 +292,13 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
 
     Route::get('Meetingtype/{id}',[\App\Http\Controllers\meetingTypeController::class,'show']);
 });
+
+
 /**
  *
- * NEW API
+ * Login APIS
  *
  */
-
-Route::post('addabsent',[MeetingInitiatorController::class,'addAbsent']);
-Route::post('addattendee',[MeetingInitiatorController::class,'addAttendee']);
-
-
-//for initiatoooor
-//Route::get('/attachment/{id}',[subjectController::class,'getAttachments']);
-//
-//Route::post('create-subject',[subjectController::class,'store']);
-
-
-
-//Route::post('redirect/{id}',[subjectController::class,'redirectSubject']);
-//
-//Route::get('subjects/{dept}',[subjectController::class,'getSubjectsforController']);
-//
-//Route::get('subjects-for-controller/{id}',[subjectControllerController::class,'getSubjects']);
-//
-//Route::get('upcoming-Meetings',[meetingController::class,'getUpcomingMeetings']);
-//
-//Route::post('/create-Meeting',[MeetingInitiatorController::class,'createMeeting']);
-
-//Route::get('/previous-Meeting/{id}',[MeetingInitiatorController::class,'getPreviousMeeting']);
-
-//Route::get('prev/{id}',[InvitationNotificationsController::class,'findlastfordoctor']);
-//
-//Route::get('docprev/{id}',[doctorController::class,'getPreviousMeeting']);
-//
-//Route::get('DOne/{id}',[meetingController::class,'isDone']);
-
-//Route::post('/addInitiator',[adminController::class,'addInitiator']);
-
-
-
-//Route::post('reset',route('password.email'));
-
-//---->Route::post('/password/reset/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class,'reset']);
 
 
 Route::post('login',[UserController::class,'login']);
