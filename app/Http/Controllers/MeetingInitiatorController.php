@@ -170,7 +170,7 @@ class MeetingInitiatorController extends doctorController
             if($initiatorAdminstration == $doctorAdminstration){
                 $fromOutside= 0;
             }
-            $request->merge(['doctorid'=>strval($value['id']),'meetingid'=>$meetingid, 'fromoutside'=>strval($fromOutside)]);
+            $request->merge(['doctorid'=>strval($value['id']),'meetingid'=>strval($meetingid), 'fromoutside'=>strval($fromOutside)]);
 //            return $request;
             $Invitation->store($request);
         }
@@ -217,13 +217,12 @@ class MeetingInitiatorController extends doctorController
 //        $Invitation->store($request);
         $data = $request->all();
 
-        if(count($data)>1){
-            foreach ($data as $key => $value){
-                $newRequest= new Request();
-                $newRequest->merge(['invitedid'=>strval($value['invitedid']),'meetingid'=>strval($value['meetingid'])]);
-                $Invitation->store($newRequest);
-            }
+        foreach ($data as $key => $value){
+            $newRequest= new Request();
+            $newRequest->merge(['invitedid'=>strval($value['invitedid']),'meetingid'=>strval($value['meetingid'])]);
+            $Invitation->store($newRequest);
         }
+
 //        else if (count($data) == 1) {
 //            $Invitation->store($request);
 //        }

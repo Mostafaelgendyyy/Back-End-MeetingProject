@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Models\doctor;
 use App\Models\InvitationNotifications;
 use App\Models\meeting;
@@ -170,10 +171,13 @@ class doctorController extends Controller
 
         foreach($meetingsData as $key=>$value)
         {
+            $value['date']= Numbers::ShowInArabicDigits($value['date']);
+            $value['startedtime']=Numbers::ShowInArabicDigits($value['startedtime']);
+            $value['endedtime']=Numbers::ShowInArabicDigits($value['endedtime']);
             $meetingInitiator = User::find($value['initiatorid']);
 
             $Returned[] = [
-                'meeing' => $value,
+                'meeting' => $value,
                 'initiator' => $meetingInitiator
             ];
 

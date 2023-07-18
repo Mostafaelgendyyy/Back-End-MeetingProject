@@ -171,8 +171,6 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
 
 /********************** Meeting initiator ******************/
 
-Route::get('InitPDFData/{initiatorid}',[meetingController::class,'DataPreviousforPDF']);
-
 Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
 
@@ -214,7 +212,7 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::get('currentMeeting/{id}',[meetingController::class,'RetreivedataforLast']);
 
-    Route::post('end-meeting',[meetingController::class,'FinalizeMeeting']);
+    Route::get('end-meeting/{meetingid}',[meetingController::class,'FinalizeMeeting']);
 
     Route::get('InitPDFData/{initiatorid}',[meetingController::class,'DataPreviousforPDF']);
 
@@ -255,12 +253,20 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::get('adminstrations',[\App\Http\Controllers\AdminstrationController::class,'getall']);
 
+    Route::post('addabsent',[MeetingInitiatorController::class,'addAbsent']);
+
+    Route::post('addattendee',[MeetingInitiatorController::class,'addAttendee']);
+
+    Route::get('/notifications/{id}',[doctorController::class,'getNotification']);
+
+    Route::post('SubjectForMeetings',[doctorController::class,'subjectsOfMeetingForDoctors']);
+
+    Route::post('saveDecision', [\App\Http\Controllers\MeetingSubjectsController::class,'takeDecision']);
+
 });
 
 
-
 /****************** Subject Controller *****************/
-Route::post('/addSubject-in-Meeting',[subjectControllerController::class,'AddSubjecttoMeeting']); //takes List of Json
 
 Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (){
 
@@ -274,7 +280,7 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
 
     Route::post('redirect/{id}',[subjectController::class,'redirectSubject']);
 
-    Route::delete('/remove-subject',[subjectControllerController::class,'RemoveSubjectFromMeeting']);
+    Route::delete('/remove-subject/{id}',[subjectControllerController::class,'RemoveSubjectFromMeeting']);
 
     Route::post('/update-profile/{id}',[UserController::class,'update']);
 
@@ -302,11 +308,8 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
  *
  */
 
-Route::delete('deletesubjectinMeeting',[\App\Http\Controllers\MeetingSubjectsController::class,'destroyByRequest']);
-
 Route::post('addabsent',[MeetingInitiatorController::class,'addAbsent']);
 Route::post('addattendee',[MeetingInitiatorController::class,'addAttendee']);
-
 
 
 //for initiatoooor

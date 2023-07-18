@@ -107,7 +107,10 @@ class MeetingSubjectsController extends Controller
             ['meetingid',$request->get('meetingid')],
             ['subjectid',$request->get('subjectid')]
         ])->get();
+        $data= subject::find($request->get('subjectid'));
+        subject::where('subjectid',$data['subjectid'])->update(['iscompleted'=>0]);
         foreach ($subject as $key => $value){
+
             $value->delete();
         }
     }
@@ -130,6 +133,11 @@ class MeetingSubjectsController extends Controller
         return $meetings;
     }
 
-//    public function takeDecision
+    public function takeDecision(Request $request){
+        $subject = MeetingSubjects::where([
+            ['meetingid',$request->get('meetingid')],
+            ['subjectid',$request->get('subjectid')]
+        ])->update(['decision'=> $request->get('decision')]);
+    }
 
 }

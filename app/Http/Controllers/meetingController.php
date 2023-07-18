@@ -81,6 +81,8 @@ class meetingController extends Controller
         //
         $meeting = meeting::find($id);
         $meeting['date']=Numbers::ShowInArabicDigits($meeting['date']);
+        $meeting['startedtime']=Numbers::ShowInArabicDigits($meeting['startedtime']);
+        $meeting['endedtime']=Numbers::ShowInArabicDigits($meeting['endedtime']);
         return $meeting;
     }
 
@@ -209,17 +211,9 @@ class meetingController extends Controller
 
 
 
-    public function FinalizeMeeting(Request $request)
+    public function FinalizeMeeting($meetingid)
     {
-        $data= $request->all();
-        $MS= new MeetingSubjectsController();
-        $meetingid= 0;
-        foreach($data as $key => $value){
-            $newRequest= new Request();
-            $meetingid=$value['meetingid'];
-            $newRequest->merge(['subjectid'=>strval($value['subjectid']),'meetingid'=>strval($value['meetingid'])]);
-            $MS->update($newRequest,$value['id']);
-        }
+
         $this->addEnded($meetingid);
         $initiatorid = meeting::select('initiatorid')->find($meetingid);
         $this->updatePrev($initiatorid);
@@ -229,11 +223,10 @@ class meetingController extends Controller
 
 
     /************* PRevious ********/
-
     public function DataPreviousforPDF ($initiatorid){
         $last = meeting::select('meetingid')->where([
             ['initiatorid',$initiatorid],
-            ['islast',-1]
+            ['islast',1]
         ])->get();
 
         foreach($last as $key=>$value)
@@ -293,11 +286,24 @@ class meetingController extends Controller
             {
                 array_push($invitedData, Invited::find($v['invitedid']));
             }
+            $informations = meeting::join('users','users.id', '=', 'meetings.initiatorid')
+                ->join('adminstrations','users.adminstrationid','=','adminstrations.id')
+                ->join('places','meetings.placeid','=','places.id')
+                ->join('meetingtypes','meetings.meetingtypeid','=','meetingtypes.id')
+                ->select('meetings.meetingid', 'places.placename', 'meetings.islast', 'meetings.date','meetingtypes.name as meetingtype','meetings.startedtime', 'meetings.endedtime','users.name', 'users.jobdescription','adminstrations.ar_name as arabicname','adminstrations.eng_name as englishname')
+                ->where('meetings.initiatorid',$initiatorid)
+                ->where('meetings.islast',1)->get();
+            $meetingSubjects = MeetingSubjects::join('meetings','meetings.meetingid', '=', 'meeting_subjects.meetingid')
+                ->join('subjects','subjects.subjectid','=','meeting_subjects.subjectid')
+                ->join('subjecttypes','subjects.subjecttypeid','=','subjecttypes.id')
+                ->select('subjecttypes.name', 'subjects.description','meeting_subjects.decision')
+                ->where('meetings.initiatorid',$initiatorid)
+                ->where('meetings.islast',1)
+                ->orderBy('subjecttypes.id','ASC')
+                ->get();
             return [
-                'meetingdata'=>$MeetingData,
-                'initatordata'=>$initiatorData,
-                'subjects'=>$subjects,
-                'subjectsData'=>$subjectData,
+                'information'=> $informations,
+                'meetingsubject'=> $meetingSubjects,
                 'attendee'=>$attendee,
                 'attendeeData'=>$attendeeData,
                 'absence'=>$absence,
@@ -307,6 +313,84 @@ class meetingController extends Controller
             ];
         }
     }
+
+//    public function DataPreviousforPDF ($initiatorid){
+//        $last = meeting::select('meetingid')->where([
+//            ['initiatorid',$initiatorid],
+//            ['islast',-1]
+//        ])->get();
+//
+//        foreach($last as $key=>$value)
+//        {
+//            $initiatorData = User::find($initiatorid);
+//            $MeetingData = meeting::find($value['meetingid']);
+//            $subjects = MeetingSubjects::where('meetingid',$value['meetingid'])->get();
+//            $subjectData=array();
+//            foreach($subjects as $k =>$v)
+//            {
+//                $subjectdata= subject::find($v['subjectid']);
+//                $arr = [
+//                    'subjectdata' => $subjectdata,
+//                    'subjecttype' => subjecttype::select('name')->find($subjectdata['subjecttypeid'])
+//                ];
+//                array_push($subjectData,$arr);
+//            }
+//            $attendee= InvitationNotifications::where([
+//                ['meetingid',$value['meetingid']],
+//                ['fromoutside',0],
+//                ['status',1]
+//            ])->get();
+//            $attendeeData=array();
+//            foreach($attendee as $k =>$v)
+//            {
+//                array_push($attendeeData, User::find($v['doctorid']));
+//            }
+//            $absence= InvitationNotifications::where([
+//                ['meetingid',$value['meetingid']],
+//                ['status',0]
+//            ])->orwhere([
+//                ['meetingid',$value['meetingid']],
+//                ['accepted',0]
+//            ])->get();
+//
+//
+//            $absenceData=array();
+//            foreach($absence as $k =>$v)
+//            {
+//                array_push($absenceData, User::find($v['doctorid']));
+//            }
+//
+//            $InvitedUsers = InvitationNotifications::where([
+//                ['meetingid',$value['meetingid']],
+//                ['fromoutside',1]
+//            ])->get();
+//            $Invited= InvitationNotificationInvited::where([
+//                ['meetingid',$value['meetingid']],
+//            ])->get();
+//            $invitedData=array();
+//            foreach($InvitedUsers as $k =>$v)
+//            {
+//                array_push($invitedData, User::find($v['doctorid']));
+//            }
+//
+//            foreach($Invited as $k =>$v)
+//            {
+//                array_push($invitedData, Invited::find($v['invitedid']));
+//            }
+//            return [
+//                'meetingdata'=>$MeetingData,
+//                'initatordata'=>$initiatorData,
+//                'subjects'=>$subjects,
+//                'subjectsData'=>$subjectData,
+//                'attendee'=>$attendee,
+//                'attendeeData'=>$attendeeData,
+//                'absence'=>$absence,
+//                'absenceData'=>$absenceData,
+//                'invited'=>[$InvitedUsers,$Invited],
+//                'invitedData'=>$invitedData
+//            ];
+//        }
+//    }
 
 
     public function getUpcomingMeetingsforcontroller($controllerid){
@@ -332,6 +416,8 @@ class meetingController extends Controller
         foreach($meetings as $k =>$v)
         {
             $v['date']= Numbers::ShowInArabicDigits($v['date']);
+            $v['startedtime']=Numbers::ShowInArabicDigits($v['startedtime']);
+            $v['endedtime']=Numbers::ShowInArabicDigits($v['endedtime']);
             array_push($Arr_meetings,$v);
         }
         return $Arr_meetings;
@@ -375,6 +461,8 @@ class meetingController extends Controller
             ['date', '>', $NowDT],
             ['initiatorid',$initiatorid]
         ])->get();
+
+//        $meetinginvitedfromInit= MeetingSubjects::select('meetingid')->where('doctorid',$initiatorid)->get();
         $UpcomingID=0;
         $mindate='50000-08-06';
 
@@ -388,7 +476,18 @@ class meetingController extends Controller
                 $UpcomingID=$v['meetingid'];
             }
         }
-        $meeting = $this->show($UpcomingID);
+        $meetinginvited= $this->getUpcomingMeetingsforDoctor($initiatorid);
+        $meetinginviteddata=meeting::find($meetinginvited['meetingid']);
+        $meetingdata = meeting::find($UpcomingID);
+        if ($meetingdata['date']<$meetinginviteddata['date'])
+        {
+            $meeting = $this->show($UpcomingID);
+        }
+        elseif ($meetingdata['date']>$meetinginviteddata['date'])
+        {
+            $meeting = $this->show($meetinginvited['meetingid']);
+        }
+
         return $meeting;
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class adminstration extends Model
 {
     use HasFactory;
-    protected $fillable = ['id','name'];
+    protected $fillable = ['id','name','eng_name'];
 
     public $timestamps = false;
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Models\meeting;
 use App\Models\MeetingSubjects;
 use App\Models\meetingtype;
@@ -247,6 +248,9 @@ class subjectController extends Controller
             foreach($meetingid as $k => $v){
                 $decision= $v['decision'];
                 $meetingdata = meeting::find($v['meetingid']);
+                $meetingdata['date']=Numbers::ShowInArabicDigits($meetingdata['date']);
+                $meetingdata['startedtime']=Numbers::ShowInArabicDigits($meetingdata['startedtime']);
+                $meetingdata['endedtime']=Numbers::ShowInArabicDigits($meetingdata['endedtime']);
                 $meetingtypeid=meeting::select('meetingtypeid')->find($v['meetingid']);
                 $meetingtypename= meetingtype::select('name')->find($meetingtypeid);
                 $list = [

@@ -16,6 +16,7 @@ class CreateAdminstrationsTable extends Migration
         Schema::create('adminstrations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('eng_name');
             $table->timestamps();
 
         });

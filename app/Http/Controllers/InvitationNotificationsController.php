@@ -115,25 +115,26 @@ class InvitationNotificationsController extends Controller
     }
 
     public function putAttendance(Request $request){
-        if ($request->get('status')!='null'){
-            return 'cannot change attendance';
+        $data = $request->all();
+        foreach($data as $key => $value)
+        {
+            InvitationNotifications::where(
+                [
+                    ['doctorid',$value['doctorid']],
+                    ['meetingid',$value['meetingid']]
+                ])->update(['status'=>1]);
         }
-        InvitationNotifications::where(
-            [
-                ['doctorid',$request->get('doctorid')],
-                ['meetingid',$request->get('meetingid')]
-            ])->update('status',1);
     }
 
     public function putAbsent(Request $request){
-        if ($request->get('status')!='null'){
-            return 'cannot change attendance';
+        $data = $request->all();
+        foreach($data as $key => $value) {
+            InvitationNotifications::where(
+                [
+                    ['doctorid', $value['doctorid']],
+                    ['meetingid', $value['meetingid']]
+                ])->update(['status'=> 0]);
         }
-        InvitationNotifications::where(
-            [
-                ['doctorid',$request->get('doctorid')],
-                ['meetingid',$request->get('meetingid')]
-            ])->update('status',0);
     }
 
     public function findlastfordoctor($id){
