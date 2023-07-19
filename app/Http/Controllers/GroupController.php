@@ -96,6 +96,9 @@ class GroupController extends Controller
     public function searchbyinitiator($initiatorid)
     {
         $group = group::select('id')->where('initiatorid',$initiatorid)->get();
-        return $group;
+        foreach($group as $k => $v)
+        {
+            return $v;
+        }
     }
 }

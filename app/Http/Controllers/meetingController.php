@@ -58,6 +58,7 @@ class meetingController extends Controller
 //        ]);
 
 
+
         $Meeting = new meeting([
             'initiatorid' => $request->get('initiatorid'),
             'placeid'=> $request->get('placeid'),
@@ -65,11 +66,18 @@ class meetingController extends Controller
             'meetingtypeid'=> $request->get('meetingtypeid'),
             'islast'=>'1',
             'startedtime'=>$request->get('startedtime')
+
         ]);
         $Meeting->save();
 
     }
-
+//$time = $meeting['startedtime'];
+//$formattedTime = date('h:i A', strtotime($time));
+//$meeting['startedtime']=$formattedTime;
+//
+//$time = $meeting['endedtime'];
+//$formattedTime = date('h:i A', strtotime($time));
+//$meeting['endedtime']=$formattedTime;
     /**
      * Display the specified resource.
      *
@@ -83,6 +91,8 @@ class meetingController extends Controller
         $meeting['date']=Numbers::ShowInArabicDigits($meeting['date']);
         $meeting['startedtime']=Numbers::ShowInArabicDigits($meeting['startedtime']);
         $meeting['endedtime']=Numbers::ShowInArabicDigits($meeting['endedtime']);
+
+
         return $meeting;
     }
 
@@ -203,7 +213,8 @@ class meetingController extends Controller
 
     public function addEnded($id)
     {
-        $NowDT = Carbon::now()->toDateString();
+
+        $NowDT = Carbon::now()->toTimeString();
         $meeting = meeting::find($id);
         $meeting->endedtime= $NowDT;
         $meeting->save();
@@ -213,11 +224,10 @@ class meetingController extends Controller
 
     public function FinalizeMeeting($meetingid)
     {
-
         $this->addEnded($meetingid);
         $initiatorid = meeting::select('initiatorid')->find($meetingid);
-        $this->updatePrev($initiatorid);
-        $this->updatelastofInitiator($initiatorid);
+        $this->updatePrev($initiatorid['initiatorid']);
+        $this->updatelastofInitiator($initiatorid['initiatorid']);
     }
 
 
@@ -428,22 +438,26 @@ class meetingController extends Controller
         $Invitation = InvitationNotifications::where('doctorid',$doctorid)->get();
         $UpcomingID=0;
         $mindate='50000-08-06';
-        foreach ($Invitation as $k => $v)
+        if(count($Invitation)>0)
         {
-            $meetings=meeting::find($v['meetingid']);
-            if($NowDT < $meetings['date']){
+            foreach ($Invitation as $k => $v)
+            {
+                $meetings=meeting::find($v['meetingid']);
+
+                if($NowDT < $meetings['date']){
 
 
-                if($meetings['date']<$mindate )
-                {
+                    if($meetings['date']<$mindate )
+                    {
 
-                    $mindate=$meetings['date'];
-                    $UpcomingID=$meetings['meetingid'];
+                        $mindate=$meetings['date'];
+                        $UpcomingID=$meetings['meetingid'];
+                    }
                 }
             }
+            $meeting = $this->show($UpcomingID);
+            return $meeting;
         }
-        $meeting = $this->show($UpcomingID);
-        return $meeting;
     }
 
 //    public function getUpcomingMeetings($id){
@@ -476,18 +490,30 @@ class meetingController extends Controller
                 $UpcomingID=$v['meetingid'];
             }
         }
-        $meetinginvited= $this->getUpcomingMeetingsforDoctor($initiatorid);
-        $meetinginviteddata=meeting::find($meetinginvited['meetingid']);
-        $meetingdata = meeting::find($UpcomingID);
-        if ($meetingdata['date']<$meetinginviteddata['date'])
-        {
-            $meeting = $this->show($UpcomingID);
-        }
-        elseif ($meetingdata['date']>$meetinginviteddata['date'])
-        {
-            $meeting = $this->show($meetinginvited['meetingid']);
-        }
 
+        $meetinginvited= $this->getUpcomingMeetingsforDoctor($initiatorid);
+
+        $meetingdata = meeting::find($UpcomingID);
+        if(empty($meetinginvited))
+        {
+            $meeting= $meetingdata;
+        }
+        else{
+            $meetinginviteddata=meeting::find($meetinginvited['meetingid']);
+
+            if ($meetingdata['date']<$meetinginviteddata['date'])
+            {
+                $meeting = $this->show($UpcomingID);
+            }
+            elseif ($meetingdata['date']>$meetinginviteddata['date'])
+            {
+                $meeting = $this->show($meetinginvited['meetingid']);
+            }
+
+        }
+        $meeting['date']=Numbers::ShowInArabicDigits($meeting['date']);
+        $meeting['startedtime']=Numbers::ShowInArabicDigits($meeting['startedtime']);
+        $meeting['endedtime']=Numbers::ShowInArabicDigits($meeting['endedtime']);
         return $meeting;
     }
 }

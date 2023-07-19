@@ -17,6 +17,7 @@
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.4",
+        "nesbot/carbon": "^2.68",
         "paragonie/random_compat": "2.*",
         "thiagoalessio/tesseract_ocr": "^2.12"
     },

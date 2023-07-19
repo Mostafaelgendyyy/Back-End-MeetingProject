@@ -144,12 +144,40 @@ class UserController extends Controller
     }
     public function getDoctorsandInitiatorbyAdminstration($initiatorid,$adminstrationid)
     {
-        $Satisfied = User::whereIn('role',[2,3])->where([
+        $Satisfied = User::select('id')->whereIn('role',[2,3])->where([
             ['id','!=',$initiatorid],
             ['adminstrationid',$adminstrationid]
         ])->get();
-        return $Satisfied;
+        $GC= new GroupController();
+        $groupid= $GC->searchbyinitiator($initiatorid);
+        $GUC= new GroupUserController();
+        $satisfiedlist = array();
+        foreach ($Satisfied as $k =>$v)
+        {
+            $newRequest = new Request();
+            $newRequest->merge(['groupid'=>$groupid['id'],'doctorid' => $v['id']]);
+            $GU= $GUC->searchbyDoctor($newRequest);
+            if ($GU == 0)
+            {
+                array_push($satisfiedlist,$v['id']);
+            }
+        }
+        $satisfiedUsers=array();
+        foreach($satisfiedlist as $id){
+            array_push($satisfiedUsers,User::find($id));
+        }
+            //User::whereIn('id',)
+        return $satisfiedUsers;
     }
+//    public function getDoctorsandInitiatorbyAdminstration($initiatorid,$adminstrationid)
+//    {
+//        $Satisfied = User::whereIn('role',[2,3])->where([
+//            ['id','!=',$initiatorid],
+//            ['adminstrationid',$adminstrationid]
+//        ])->get();
+//        return $Satisfied;
+//    }
+
 
     public function searchbyname($name){
 //        $users = User::where([

@@ -14,4 +14,5 @@ class meeting extends Model
     protected $primaryKey = 'meetingid';
 
 
+
 }

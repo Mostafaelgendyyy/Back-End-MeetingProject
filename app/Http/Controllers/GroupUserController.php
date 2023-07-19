@@ -105,7 +105,6 @@ class GroupUserController extends Controller
         foreach ($row as $key=> $value){
             $value->delete();
         }
-
     }
 
     public function RetreiveGroupUsers($initiatorid)
@@ -122,6 +121,15 @@ class GroupUserController extends Controller
             }
         }
         return $GUsers;
+    }
+
+    public function searchbyDoctor(Request $request){
+
+        $row = groupuser::where([
+            ['groupid', '=',$request->get('groupid')],
+            ['doctorid', '=',$request->get('doctorid')]
+        ])->get();
+        return count($row);
     }
 
 
