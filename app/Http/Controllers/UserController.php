@@ -66,14 +66,14 @@ class UserController extends Controller
         $user = User::find($id);
         $user->name = $request->get('name');
         $user->email = $request->get('email');
-        $user->password = $request->get('password');
+        $user->password = bcrypt($request->get('password'));
         $user->jobdescription=$request->get('jobdescription');
         $user->save();
     }
 
     public function changePassword(Request $request,$id){
         $user = User::find($id);
-        $user->password = $request->get('password');
+        $user->password = bcrypt($request->get('password'));
         $user->save();
     }
 
@@ -190,4 +190,14 @@ class UserController extends Controller
 
     }
 
+    public function checkPassword(Request $request){
+        $user = User::find($request->get('id'));
+        if(!Hash::check($request->get('password'),$user->password))
+        {
+            return response([
+                'error'=>['email or password is not matched']
+            ],401);
+        }
+        return response('Right',201);
+    }
 }

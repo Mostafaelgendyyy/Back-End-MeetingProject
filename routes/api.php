@@ -73,8 +73,6 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 
     Route::post('/update-profile/{id}',[UserController::class,'update']);
 
-    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
-
     Route::get('/subjects/{containerID}',[containerSubjectController::class,'getSubjectsofContainer']);
 
     Route::post('UpdateUSER/{id}',[UserController::class,'UpdateUserROle']);
@@ -126,6 +124,10 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::get('adminstrations',[\App\Http\Controllers\AdminstrationController::class,'getall']);
 
     Route::get('DoctorsandInitiator/{initiatorid}',[UserController::class,'getDoctorsandInitiator']);
+
+    Route::post('checkPass',[UserController::class,'checkPassword']);
+
+    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
 });
 
 /****************** Doctor *****************/
@@ -134,8 +136,6 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[doctorController::class, 'index']);
 
     Route::post('/update-profile/{id}',[UserController::class,'update']);
-
-    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
 
     Route::post('voteaccept-meeting',[containerSubjectController::class,'voteAccept']);
 
@@ -158,9 +158,15 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
     Route::get('Subjecttype/{id}',[\App\Http\Controllers\subjectTypeController::class,'show']);
 
     Route::get('place/{id}',[PlaceController::class,'show']);
+
+    Route::post('checkPass',[UserController::class,'checkPassword']);
+
+    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
 });
 
 /********************** Meeting initiator ******************/
+
+Route::get('SubjectForMeetings/{meetingid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getSubjectsofMeeting']);
 
 Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
@@ -192,8 +198,6 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
     Route::delete('/delete-Meeting',[MeetingInitiatorController::class,'deleteMeeting']);
 
     Route::post('/update-profile/{id}',[UserController::class,'update']);
-
-    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
 
     Route::get('/previous-Meeting/{id}',[MeetingInitiatorController::class,'getPreviousMeeting']);
 
@@ -254,11 +258,11 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
     Route::post('saveDecision', [\App\Http\Controllers\MeetingSubjectsController::class,'takeDecision']);
 
-});
-Route::get('/notifications/{id}',[doctorController::class,'getNotification']);
-Route::get('DoctorsandInitiators/{initiatorid}/{adminstrationid}',[UserController::class,'getDoctorsandInitiatorbyAdminstration']);
+    Route::post('checkPass',[UserController::class,'checkPassword']);
 
-Route::get('end-meeting/{meetingid}',[meetingController::class,'FinalizeMeeting']);
+    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
+
+});
 
 /****************** Subject Controller *****************/
 
@@ -278,8 +282,6 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
 
     Route::post('/update-profile/{id}',[UserController::class,'update']);
 
-    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
-
     Route::get('Subjects/{controllerid}',[subjectControllerController::class,'getSubjects']);
 
     Route::get('ControllerPDFData/{id}',[subjectControllerController::class,'getPrevPDF']);
@@ -295,7 +297,13 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
     Route::get('SubjectForMeetings/{meetingid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getSubjectsofMeeting']);
 
     Route::get('Meetingtype/{id}',[\App\Http\Controllers\meetingTypeController::class,'show']);
+
+    Route::post('checkPass',[UserController::class,'checkPassword']);
+
+    Route::post('/change-password/{id}',[UserController::class,'changePassword']);
 });
+
+Route::get('SubjectForMeetings/{meetingid}',[\App\Http\Controllers\MeetingSubjectsController::class,'getSubjectsofMeeting']);
 
 
 /**

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\MeetingSubjects;
 use App\Models\subject;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MeetingSubjectsController extends Controller
 {
@@ -123,6 +125,17 @@ class MeetingSubjectsController extends Controller
         }
         return $subjects;
     }
+
+//    public function getSubjectsofMeeting($meetingid){
+//        $subjectsIDS = MeetingSubjects::select('subjectid')->where('meetingid',$meetingid)->get();
+//        $subjects= array();
+//        foreach ($subjectsIDS as $key => $value){
+//            array_push($subjects,$value['subjectid']);
+//        }
+////        $subjectsData=  DB::table('subjects')->select('*')->groupBy('subjecttypeid')->whereIn('subjectid',$subjects)->get();
+//        $subjectsData = subject::Groupby('subjecttypeid')->select('subjecttypeid', DB::raw('count(*) as subjects_count'))->get();
+//        return $subjectsData;
+//    }
 
     public function getMeetings($subjectid){
         $meetingid = MeetingSubjects::select('meetingid')->where('subjectid',$subjectid)->get();
