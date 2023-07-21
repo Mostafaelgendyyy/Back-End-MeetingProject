@@ -236,9 +236,9 @@ class meetingController extends Controller
     public function DataPreviousforPDF ($initiatorid){
         $last = meeting::select('meetingid')->where([
             ['initiatorid',$initiatorid],
-            ['islast',1]
+            ['islast',-1]
         ])->get();
-
+// by ended time and last date
         foreach($last as $key=>$value)
         {
             $initiatorData = User::find($initiatorid);

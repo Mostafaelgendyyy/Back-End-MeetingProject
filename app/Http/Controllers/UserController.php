@@ -45,7 +45,7 @@ class UserController extends Controller
     {
         // Find certain admin with certain id
 
-        return $id? User::find($id) : admin::all();
+        return $id? User::find($id) : User::all();
     }
 
     public function showbyEmail($email)
