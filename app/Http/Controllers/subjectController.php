@@ -65,7 +65,6 @@ class subjectController extends Controller
                     'description' => $request->get('description'),
                     'subjecttypeid'=> $request->get('subjecttypeid'),
                     'iscompleted' => 1,
-                    'attachmentlink'=>$request->get('attachmentlink')
                 ]);
 //            return $lastmeeting['meetingid'];
                 $subject->save();
@@ -80,7 +79,6 @@ class subjectController extends Controller
                     'description' => $request->get('description'),
                     'subjecttypeid'=> $request->get('subjecttypeid'),
                     'iscompleted' => 0,
-                    'attachmentlink'=>$request->get('attachmentlink')
                 ]);
                 $subject->save();
             }
@@ -91,7 +89,6 @@ class subjectController extends Controller
                 'description' => $request->get('description'),
                 'subjecttypeid'=> $request->get('subjecttypeid'),
                 'iscompleted' => 0,
-                'attachmentlink'=>$request->get('attachmentlink')
             ]);
             $subject->save();
         }
@@ -182,11 +179,6 @@ class subjectController extends Controller
 
     //public function getArchived()
 
-    public function getAttachments($id){
-        $subject= subject::find($id);
-        $subjectattach=$subject::select('attachment-link')->get();
-        return $subjectattach;
-    }
 
     public function redirectSubject(Request $request,$id){
         $subject=subject::find($id);

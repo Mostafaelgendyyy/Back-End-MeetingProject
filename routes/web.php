@@ -26,16 +26,10 @@ Auth::routes();
 //
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::post('uploadDOC',[\App\Http\Controllers\AttachmentController::class,'store'])->name('upload');;
 
-//Route:: middleware('auth:sanctum')->get('/user',function (\http\Env\Request $request){
-//
-//    return $request->user();
-//});
+Route::get('downloadAttachment/{file}',[\App\Http\Controllers\AttachmentController::class,'download']);
 
-//
-//Route::Delete('/logout', [AuthController::class, 'logout']);
-//Route::post('/login', [AuthController::class, 'login']);
+Route::get('viewAttachment/{id}',[\App\Http\Controllers\AttachmentController::class,'view']);
 
-//Route::get('login',function (){
-//    return "logged in";
-//});
+Route::get('attachmentsofSubjects/{subjectid}',[\App\Http\Controllers\AttachmentController::class,'getAttachmentsofSubject']);
