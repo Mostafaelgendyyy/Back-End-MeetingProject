@@ -36,7 +36,7 @@ class CreateUsersTable extends Migration
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
-            'role' => 3,
+            'role' => 1,
             'jobdescription'=>'مسؤل النظام',
             'created_at' => now(),
             'updated_at' => now(),
