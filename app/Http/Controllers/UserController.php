@@ -155,18 +155,23 @@ class UserController extends Controller
         foreach ($Satisfied as $k =>$v)
         {
             $newRequest = new Request();
-            $newRequest->merge(['groupid'=>$groupid['id'],'doctorid' => $v['id']]);
-            $GU= $GUC->searchbyDoctor($newRequest);
-            if ($GU == 0)
+            if ($groupid==0)
             {
                 array_push($satisfiedlist,$v['id']);
+            }
+            else{
+                $newRequest->merge(['groupid'=>$groupid['id'],'doctorid' => $v['id']]);
+                $GU= $GUC->searchbyDoctor($newRequest);
+                if ($GU == 0)
+                {
+                    array_push($satisfiedlist,$v['id']);
+                }
             }
         }
         $satisfiedUsers=array();
         foreach($satisfiedlist as $id){
             array_push($satisfiedUsers,User::find($id));
         }
-            //User::whereIn('id',)
         return $satisfiedUsers;
     }
 //    public function getDoctorsandInitiatorbyAdminstration($initiatorid,$adminstrationid)

@@ -164,20 +164,6 @@ class subjectControllerController extends Controller
         return $controller->getSubjects($id);
     }
 
-    public function getPrevPDF($id){
-        $lastsubjectWritten = subject::where([
-            ['userid',$id],
-            ['iscompleted',1]
-        ])->get()->last();
 
-        $meetingid = MeetingSubjects::where('subjectid',$lastsubjectWritten->subjectid)->get();
-        $MIC= new MeetingController();
-        foreach ($meetingid as $k=> $v)
-        {
-            $initiator = meeting::select('initiatorid')->find($v['meetingid']);
-            return $MIC->DataPreviousforPDF($initiator['initiatorid']);
-        }
-
-    }
 }
 

@@ -34,7 +34,6 @@ Route::middleware('Auth:api')->get('/user', function (Request $request) {
 
 
 /****************** ADMIN *****************/
-Route::post('/addAdmin',[adminController::class,'addAdmin']);
 
 Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
     Route::get('/Interface',[adminController::class, 'index']);
@@ -130,6 +129,7 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function (){
 /****************** Doctor *****************/
 
 Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
+
     Route::get('/Interface',[doctorController::class, 'index']);
 
     Route::post('/update-profile/{id}',[UserController::class,'update']);
@@ -156,12 +156,16 @@ Route::prefix('doctor')->middleware('auth:sanctum')->group(function (){
 
     Route::get('place/{id}',[PlaceController::class,'show']);
 
+    Route::get('DoctorPDF/{initiatorid}',[meetingController::class,'DataPreviousforPDF']);
 });
+
 
 /********************** Meeting initiator ******************/
 
 
+
 Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (){
+
     Route::get('/Interface',[MeetingInitiatorController::class, 'index']);
 
     Route::post('create-subject',[subjectController::class,'store']);
@@ -253,6 +257,7 @@ Route::prefix('meeting-initiator')->middleware('auth:sanctum')->group(function (
 
 });
 
+
 /****************** Subject Controller *****************/
 
 Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (){
@@ -273,7 +278,7 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
 
     Route::get('Subjects/{controllerid}',[subjectControllerController::class,'getSubjects']);
 
-    Route::get('ControllerPDFData/{id}',[subjectControllerController::class,'getPrevPDF']);
+    Route::get('ControllerPDFData/{id}',[meetingController::class,'DataPreviousforPDFCONTROLLER']);
 
     Route::get('upcomings/{id}',[meetingController::class,'getUpcomingMeetingsforcontroller']);
 
@@ -288,7 +293,6 @@ Route::prefix('subjectController')->middleware('auth:sanctum')->group(function (
     Route::get('Meetingtype/{id}',[\App\Http\Controllers\meetingTypeController::class,'show']);
 
 });
-
 
 
 /**
