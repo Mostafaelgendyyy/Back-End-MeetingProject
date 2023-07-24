@@ -47,7 +47,7 @@ class AttachmentController extends Controller
             $data->subjectid=$request->subjectid;
             $data->save();
         }
-        return response([],200);
+        return response(['تم اضافة المرفقات، من فضلك اغلق هذه الصفحة'],200);
     }
 
     /**

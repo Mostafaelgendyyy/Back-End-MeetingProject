@@ -26,7 +26,8 @@ Auth::routes();
 //
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::post('uploadDOC/{subjectid}',[\App\Http\Controllers\AttachmentController::class,'store'])->name('upload');;
+Route::post('uploadDOC/{subjectid}',[\App\Http\Controllers\AttachmentController::class,'store'])
+    ->name('upload');
 
 Route::get('downloadAttachment/{file}',[\App\Http\Controllers\AttachmentController::class,'download']);
 
