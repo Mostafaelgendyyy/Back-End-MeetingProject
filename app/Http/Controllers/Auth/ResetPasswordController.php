@@ -32,7 +32,7 @@ class ResetPasswordController extends Controller
     protected function sendResetResponse(Request $request, $response)
     {
         return response()->json([
-            'status' => 'passwordchanged'
+            'Succeeded' => 'password changed successfully, Please go to login page'
         ],200);
     }
 }

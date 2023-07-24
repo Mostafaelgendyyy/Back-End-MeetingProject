@@ -302,7 +302,7 @@ class meetingController extends Controller
             ->select('meetings.meetingid', 'places.placename', 'meetings.islast', 'meetings.date','meetingtypes.name as meetingtype','meetings.startedtime', 'meetings.endedtime','users.name', 'users.jobdescription','adminstrations.ar_name as arabicname','adminstrations.eng_name as englishname')
 //            ->where('meetings.meetingid',$last->meetingid)
             ->where('meetings.initiatorid',$initiatorid)
-            ->where("meetings.endedtime","!=","00:00:00")->get();
+            ->where("meetings.endedtime","!=","00:00:00")->get()->last();
 
         $meetingSubjects = MeetingSubjects::join('meetings','meetings.meetingid', '=', 'meeting_subjects.meetingid')
             ->join('subjects','subjects.subjectid','=','meeting_subjects.subjectid')
@@ -405,7 +405,7 @@ class meetingController extends Controller
             ->join('meetingtypes','meetings.meetingtypeid','=','meetingtypes.id')
             ->select('meetings.meetingid', 'places.placename', 'meetings.islast', 'meetings.date','meetingtypes.name as meetingtype','meetings.startedtime', 'meetings.endedtime','users.name', 'users.jobdescription','adminstrations.ar_name as arabicname','adminstrations.eng_name as englishname')
             ->where('meetings.initiatorid',$initiatorid)
-            ->where("meetings.endedtime","!=","00:00:00")->get();
+            ->where("meetings.endedtime","!=","00:00:00")->get()->last();
 
         $meetingSubjects = MeetingSubjects::join('meetings','meetings.meetingid', '=', 'meeting_subjects.meetingid')
             ->join('subjects','subjects.subjectid','=','meeting_subjects.subjectid')

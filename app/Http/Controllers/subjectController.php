@@ -64,23 +64,24 @@ class subjectController extends Controller
                     'userid' => $request->get('userid'),
                     'description' => $request->get('description'),
                     'subjecttypeid'=> $request->get('subjecttypeid'),
-                    'iscompleted' => 1,
+                    'iscompleted' => 1
                 ]);
-//            return $lastmeeting['meetingid'];
                 $subject->save();
                 $subid= subject::select('subjectid')->where('userid',$request->get('userid'))->get()->last();
                 $requestforSubject= new Request();
                 $requestforSubject->merge(['meetingid'=>strval($lastmeeting['meetingid']),'subjectid'=>strval($subid['subjectid'])]);
                 $MS->store($requestforSubject);
+                return subject::where('userid',$request->get('userid'))->get()->last();
             }
             else{
                 $subject= new subject([
                     'userid' => $request->get('userid'),
                     'description' => $request->get('description'),
                     'subjecttypeid'=> $request->get('subjecttypeid'),
-                    'iscompleted' => 0,
+                    'iscompleted' => 0
                 ]);
                 $subject->save();
+                return subject::where('userid',$request->get('userid'))->get()->last();
             }
         }
         else{
@@ -88,9 +89,10 @@ class subjectController extends Controller
                 'userid' => $request->get('userid'),
                 'description' => $request->get('description'),
                 'subjecttypeid'=> $request->get('subjecttypeid'),
-                'iscompleted' => 0,
+                'iscompleted' => 0
             ]);
             $subject->save();
+            return subject::where('userid',$request->get('userid'))->get()->last();
         }
     }
 

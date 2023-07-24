@@ -15,7 +15,7 @@ class CreateAttachmentsTable extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('subjectid');
+            $table->unsignedBigInteger('subjectid')->nullable();
             $table->foreign('subjectid')->references('subjectid')->on('subjects')->onDelete('cascade');
             $table->string('file');
             $table->timestamps();

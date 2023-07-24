@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\attachment;
+use http\Client\Response;
 use Illuminate\Http\Request;
 
 class AttachmentController extends Controller
@@ -40,13 +41,13 @@ class AttachmentController extends Controller
         foreach($files as $file)
         {
             $data = new attachment();
-            $filename = time().".".$file->getClientOriginalExtension();
+            $filename = time().".".$file->getClientOriginalName();
             $file->move('assets',$filename);
             $data->file=$filename;
             $data->subjectid=$request->subjectid;
             $data->save();
         }
-        return redirect()->back();
+        return response([],200);
     }
 
     /**

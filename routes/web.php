@@ -26,10 +26,16 @@ Auth::routes();
 //
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::post('uploadDOC',[\App\Http\Controllers\AttachmentController::class,'store'])->name('upload');;
+Route::post('uploadDOC/{subjectid}',[\App\Http\Controllers\AttachmentController::class,'store'])->name('upload');;
 
 Route::get('downloadAttachment/{file}',[\App\Http\Controllers\AttachmentController::class,'download']);
 
 Route::get('viewAttachment/{id}',[\App\Http\Controllers\AttachmentController::class,'view']);
 
 Route::get('attachmentsofSubjects/{subjectid}',[\App\Http\Controllers\AttachmentController::class,'getAttachmentsofSubject']);
+
+
+Route::get('uploadDOC/{subjectid}',function ($subjectid){
+    return view('attachments',compact('subjectid'));
+});
+
